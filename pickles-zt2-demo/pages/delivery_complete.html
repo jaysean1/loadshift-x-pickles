@@ -151,7 +151,7 @@
                 <div class="bg-white p-6 card-shadow mb-6">
                     <div class="flex items-center space-x-4">
                         <div class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                            <img src="https://source.unsplash.com/64x64/?man,driver,portrait" 
+                            <img src="../assets/images/driver.jpg" 
                                  alt="Driver Photo" class="w-full h-full object-cover">
                         </div>
                         <div class="flex-1">
@@ -184,9 +184,8 @@
                     
                     <div id="qr-scanner" class="qr-scanner w-64 h-64 mx-auto mb-6 flex items-center justify-center bg-gray-100">
                         <div class="scanner-line"></div>
-                        <div class="text-center">
-                            <i data-lucide="qr-code" class="w-24 h-24 text-gray-400 mb-4 mx-auto"></i>
-                            <p class="text-sm text-gray-600">Position QR code in the frame</p>
+                        <div class="w-full h-full flex items-center justify-center">
+                            <img src="../assets/images/qrcode.png" alt="QR Code" class="w-40 h-40 object-contain">
                         </div>
                     </div>
                     
@@ -211,8 +210,8 @@
                     <div class="photo-gallery mb-6">
                         <div class="photo-item">
                             <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
-                                <img src="https://source.unsplash.com/280x200/?truck,loading,equipment" 
-                                     alt="Loading Photo" class="w-full h-48 object-cover">
+                                <img src="../assets/images/item/image1.png" 
+                                     alt="Item Photo 1" class="w-full h-48 object-cover">
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-medium text-gray-700">Loading at Pickles</span>
@@ -225,8 +224,8 @@
                         
                         <div class="photo-item">
                             <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
-                                <img src="https://source.unsplash.com/280x200/?highway,transport,truck" 
-                                     alt="Transport Photo" class="w-full h-48 object-cover">
+                                <img src="../assets/images/item/image2.png" 
+                                     alt="Item Photo 2" class="w-full h-48 object-cover">
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-medium text-gray-700">En Route</span>
@@ -239,11 +238,25 @@
                         
                         <div class="photo-item">
                             <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
-                                <img src="https://source.unsplash.com/280x200/?delivery,warehouse,unloading" 
-                                     alt="Delivery Photo" class="w-full h-48 object-cover">
+                                <img src="../assets/images/item/image3.png" 
+                                     alt="Item Photo 3" class="w-full h-48 object-cover">
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm font-medium text-gray-700">Delivery Site</span>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" checked class="text-green-600" readonly>
+                                    <span class="text-sm text-green-600">Verified</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-item">
+                            <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
+                                <img src="../assets/images/item/image4.png" 
+                                     alt="Item Photo 4" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Item Condition</span>
                                 <label class="flex items-center space-x-2">
                                     <input type="checkbox" checked class="text-green-600" readonly>
                                     <span class="text-sm text-green-600">Verified</span>
