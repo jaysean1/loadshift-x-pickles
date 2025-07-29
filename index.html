@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickles ZT2 Platform - Zero Touch Transport Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* 自定义样式 - 基于现有页面设计 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 24px;
+        }
+        
+        .demo-iframe {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-demo .demo-iframe {
+            height: 800px;
+            border-radius: 24px;
+        }
+        
+        .desktop-demo .demo-iframe {
+            height: 900px;
+            transform: scale(0.8);
+            transform-origin: top center;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .timeline-step {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .timeline-step.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .timeline-step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .info-panel {
+            background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid #667eea;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .layout-alternating {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        
+        @media (max-width: 1024px) {
+            .layout-alternating {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .desktop-demo .demo-iframe {
+                transform: scale(0.6);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .layout-alternating {
+                padding: 1rem;
+            }
+            
+            .desktop-demo .demo-iframe {
+                transform: scale(0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header Section -->
+    <header class="gradient-bg text-white py-6 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-2xl font-bold">Pickles × Loadshift</div>
+                    <div class="hidden md:block bg-white/20 px-3 py-1 rounded-full text-sm">
+                        Zero Touch Transport (ZT2) Platform
+                    </div>
+                </div>
+                
+                <!-- Progress Indicator -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm opacity-90">Progress:</span>
+                    <div class="bg-white/20 rounded-full px-3 py-1 text-sm font-medium">
+                        <span id="current-step">1</span> of <span id="total-steps">6</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timeline Navigation -->
+            <div class="mt-6">
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <div class="timeline-step active bg-white/20 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="0">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">1</span>
+                            <span>Quote Request</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step bg-white/10 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="1">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">2</span>
+                            <span>AI Confirmation</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step bg-white/10 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="2">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">3</span>
+                            <span>Order Processing</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step bg-white/10 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="3">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">4</span>
+                            <span>Pickup Auth</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step bg-white/10 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="4">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">5</span>
+                            <span>Operations</span>
+                        </div>
+                    </div>
+                    <div class="timeline-step bg-white/10 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer" data-step="5">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-xs">6</span>
+                            <span>Delivery Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Demo Area -->
+    <main class="max-w-7xl mx-auto py-8 px-4">
+        <!-- Hero Section -->
+        <div id="hero-section" class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Pickles Zero Touch Transport (ZT2) Platform
+            </h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Experience the future of auction logistics through our comprehensive demo showcasing instant AI-powered transport quotes, complete automation from purchase to delivery, and real-time operational transparency.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button id="start-demo" class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                    Start Demo Experience
+                </button>
+                <div class="text-sm text-gray-500">
+                    <i data-lucide="clock" class="w-4 h-4 inline mr-1"></i>
+                    Estimated time: 5-8 minutes
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Container -->
+        <div id="demo-section" class="hidden">
+            <div class="layout-alternating mb-8">
+                <!-- Demo Iframe Container -->
+                <div id="demo-container" class="flex-1">
+                    <div id="mobile-demo" class="mobile-demo">
+                        <div class="mobile-container">
+                            <iframe id="demo-iframe" class="demo-iframe" src=""></iframe>
+                        </div>
+                    </div>
+                    <div id="desktop-demo" class="desktop-demo hidden">
+                        <div class="card-shadow rounded-lg overflow-hidden">
+                            <iframe id="desktop-iframe" class="demo-iframe" src=""></iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contextual Information Panel -->
+                <div id="info-panel" class="flex-1 min-w-0">
+                    <div class="info-panel p-6 rounded-lg card-shadow">
+                        <h3 id="info-title" class="text-2xl font-bold text-gray-900 mb-4">AI-Powered Quote Generation</h3>
+                        <p id="info-description" class="text-gray-600 mb-6">
+                            Experience instant transport cost estimation with machine learning-driven analysis, computer vision item recognition, and access to our network of 12+ certified carriers.
+                        </p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-gray-900 mb-3">Key Features:</h4>
+                            <ul id="info-features" class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                    Computer vision item analysis
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                    12+ certified carrier network
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                    60-minute SLA guarantee
+                                </li>
+                                <li class="flex items-start">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                    Three pricing options: cheapest, fastest, highest-rated
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-900 mb-2">Business Impact:</h4>
+                            <p id="info-business-impact" class="text-blue-800 text-sm">
+                                Reduces quote turnaround from days to minutes, improving customer satisfaction and conversion rates by 40%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Controls -->
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" class="flex items-center px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i data-lucide="chevron-left" class="w-4 h-4 mr-2"></i>
+                    Previous
+                </button>
+                
+                <div class="flex-1 mx-8">
+                    <div class="bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar h-full rounded-full" style="width: 16.67%"></div>
+                    </div>
+                </div>
+                
+                <button id="next-btn" class="flex items-center px-6 py-3 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity">
+                    Next
+                    <i data-lucide="chevron-right" class="w-4 h-4 ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 px-4 mt-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Pickles × Loadshift Partnership</h3>
+                    <p class="text-gray-400 text-sm">
+                        Revolutionary AI-driven logistics solution combining Pickles Auctions' market expertise with Loadshift's crowdsourced transport network.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Platform Capabilities</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>AI Quote Engine with ML pricing models</li>
+                        <li>Computer Vision item specification</li>
+                        <li>LLM Integration for intelligent assistance</li>
+                        <li>Real-time GPS tracking</li>
+                        <li>Digital workflow automation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Technical Specifications</h3>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>Mobile-first responsive design</li>
+                        <li>60-minute SLA guarantee</li>
+                        <li>12+ certified carrier network</li>
+                        <li>Real-time operational transparency</li>
+                        <li>Zero-touch automation</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-4 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Pickles × Loadshift. Zero Touch Transport (ZT2) Platform Demo.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ZT2 Demo Controller - 主控制器
+        class ZT2DemoController {
+            constructor() {
+                this.currentStep = 0;
+                this.totalSteps = 6;
+                this.demoPages = [
+                    {
+                        url: 'pickles-zt2-demo/pages/client_quote.html',
+                        type: 'mobile',
+                        title: 'AI-Powered Quote Generation',
+                        description: 'Experience instant transport cost estimation with machine learning-driven analysis, computer vision item recognition, and access to our network of 12+ certified carriers.',
+                        features: [
+                            'Computer vision item analysis',
+                            '12+ certified carrier network',
+                            '60-minute SLA guarantee',
+                            'Three pricing options: cheapest, fastest, highest-rated'
+                        ],
+                        businessImpact: 'Reduces quote turnaround from days to minutes, improving customer satisfaction and conversion rates by 40%.'
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/phonecall_confirm.html',
+                        type: 'mobile',
+                        title: 'AI Agent Confirmation',
+                        description: 'Intelligent voice confirmation system using natural language processing to verify delivery details and customer preferences with human-like conversation.',
+                        features: [
+                            'Natural language processing',
+                            'Voice recognition and synthesis',
+                            'Intelligent conversation flow',
+                            'Automatic detail verification'
+                        ],
+                        businessImpact: 'Eliminates 80% of manual confirmation calls, reducing operational costs while improving customer experience.'
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/order_confirmation.html',
+                        type: 'mobile',
+                        title: 'Automated Order Processing',
+                        description: 'Seamless order processing workflow with automatic carrier assignment, route optimization, and real-time customer notifications.',
+                        features: [
+                            'Automatic carrier matching',
+                            'Route optimization algorithms',
+                            'Real-time notification system',
+                            'Digital documentation'
+                        ],
+                        businessImpact: 'Streamlines order processing by 90%, from 2 hours to 12 minutes, with 99.5% accuracy rate.'
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/pickup_auth.html',
+                        type: 'mobile',
+                        title: 'Digital Pickup Authorization',
+                        description: 'Secure digital verification system using QR codes, photo documentation, and e-signatures for contactless pickup authorization.',
+                        features: [
+                            'QR code verification',
+                            'Photo documentation',
+                            'Digital signatures',
+                            'Identity verification'
+                        ],
+                        businessImpact: 'Ensures 100% secure pickups while reducing verification time from 15 minutes to 2 minutes.'
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/god_mode.html',
+                        type: 'desktop',
+                        title: 'Operations Command Center',
+                        description: 'Comprehensive operational dashboard providing real-time visibility into all transport activities, predictive analytics, and automated exception handling.',
+                        features: [
+                            'Real-time transport tracking',
+                            'Predictive analytics dashboard',
+                            'Automated exception handling',
+                            'Performance metrics and KPIs'
+                        ],
+                        businessImpact: 'Provides 360° operational visibility, reducing manual oversight by 95% and improving delivery performance by 30%.'
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/delivery_complete.html',
+                        type: 'mobile',
+                        title: 'Delivery Completion',
+                        description: 'Complete delivery verification with customer satisfaction tracking, automatic payment processing, and performance feedback collection.',
+                        features: [
+                            'Delivery photo verification',
+                            'Customer satisfaction surveys',
+                            'Automatic payment processing',
+                            'Performance analytics'
+                        ],
+                        businessImpact: 'Achieves 98% customer satisfaction rate with automated completion processing, reducing administrative overhead by 85%.'
+                    }
+                ];
+                
+                this.initializeElements();
+                this.bindEvents();
+            }
+            
+            initializeElements() {
+                this.heroSection = document.getElementById('hero-section');
+                this.demoSection = document.getElementById('demo-section');
+                this.startDemoBtn = document.getElementById('start-demo');
+                this.prevBtn = document.getElementById('prev-btn');
+                this.nextBtn = document.getElementById('next-btn');
+                this.currentStepSpan = document.getElementById('current-step');
+                this.totalStepsSpan = document.getElementById('total-steps');
+                this.progressBar = document.getElementById('progress-bar');
+                this.demoIframe = document.getElementById('demo-iframe');
+                this.desktopIframe = document.getElementById('desktop-iframe');
+                this.mobileDemo = document.getElementById('mobile-demo');
+                this.desktopDemo = document.getElementById('desktop-demo');
+                this.infoTitle = document.getElementById('info-title');
+                this.infoDescription = document.getElementById('info-description');
+                this.infoFeatures = document.getElementById('info-features');
+                this.infoBusinessImpact = document.getElementById('info-business-impact');
+                
+                this.totalStepsSpan.textContent = this.totalSteps;
+            }
+            
+            bindEvents() {
+                this.startDemoBtn.addEventListener('click', () => this.startDemo());
+                this.prevBtn.addEventListener('click', () => this.previousStep());
+                this.nextBtn.addEventListener('click', () => this.nextStep());
+                
+                // Timeline step navigation
+                document.querySelectorAll('.timeline-step').forEach((step, index) => {
+                    step.addEventListener('click', () => this.navigateToStep(index));
+                });
+                
+                // Handle iframe load events
+                this.demoIframe.addEventListener('load', () => this.handleIframeLoad());
+                this.desktopIframe.addEventListener('load', () => this.handleIframeLoad());
+            }
+            
+            startDemo() {
+                this.heroSection.classList.add('hidden');
+                this.demoSection.classList.remove('hidden');
+                this.demoSection.classList.add('fade-in');
+                this.navigateToStep(0);
+            }
+            
+            navigateToStep(stepIndex) {
+                if (stepIndex < 0 || stepIndex >= this.totalSteps) return;
+                
+                this.currentStep = stepIndex;
+                this.updateUI();
+                this.loadDemoPage();
+                this.updateTimeline();
+            }
+            
+            previousStep() {
+                if (this.currentStep > 0) {
+                    this.navigateToStep(this.currentStep - 1);
+                }
+            }
+            
+            nextStep() {
+                if (this.currentStep < this.totalSteps - 1) {
+                    this.navigateToStep(this.currentStep + 1);
+                }
+            }
+            
+            updateUI() {
+                // Update step counter
+                this.currentStepSpan.textContent = this.currentStep + 1;
+                
+                // Update progress bar
+                const progressPercentage = ((this.currentStep + 1) / this.totalSteps) * 100;
+                this.progressBar.style.width = `${progressPercentage}%`;
+                
+                // Update navigation buttons
+                this.prevBtn.disabled = this.currentStep === 0;
+                this.nextBtn.textContent = this.currentStep === this.totalSteps - 1 ? 'Complete Demo' : 'Next';
+                
+                // Update info panel
+                const currentPage = this.demoPages[this.currentStep];
+                this.infoTitle.textContent = currentPage.title;
+                this.infoDescription.textContent = currentPage.description;
+                this.infoBusinessImpact.textContent = currentPage.businessImpact;
+                
+                // Update features list
+                this.infoFeatures.innerHTML = currentPage.features.map(feature => `
+                    <li class="flex items-start">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                        ${feature}
+                    </li>
+                `).join('');
+                
+                // Re-initialize Lucide icons
+                lucide.createIcons();
+            }
+            
+            updateTimeline() {
+                document.querySelectorAll('.timeline-step').forEach((step, index) => {
+                    step.classList.remove('active');
+                    if (index === this.currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+            
+            loadDemoPage() {
+                const currentPage = this.demoPages[this.currentStep];
+                
+                if (currentPage.type === 'mobile') {
+                    this.mobileDemo.classList.remove('hidden');
+                    this.desktopDemo.classList.add('hidden');
+                    this.demoIframe.src = currentPage.url;
+                } else {
+                    this.mobileDemo.classList.add('hidden');
+                    this.desktopDemo.classList.remove('hidden');
+                    this.desktopIframe.src = currentPage.url;
+                }
+            }
+            
+            handleIframeLoad() {
+                // Add any iframe-specific handling here
+                console.log(`Loaded demo page: ${this.demoPages[this.currentStep].title}`);
+            }
+        }
+        
+        // Initialize the demo controller when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const demoController = new ZT2DemoController();
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Add any additional initialization here
+            console.log('Pickles ZT2 Platform Demo initialized');
+        });
+    </script>
+</body>
+</html>
