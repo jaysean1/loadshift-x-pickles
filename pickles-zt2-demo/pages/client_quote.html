@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Transport Quote - Pickles × Loadshift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* 自定义样式 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .ai-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        
+        .carrier-dot {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            position: absolute;
+            animation: carrier-pulse 3s infinite;
+        }
+        
+        @keyframes carrier-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
+        .price-highlight {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .route-line {
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid #3b82f6;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #3b82f6; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-state {
+            transition: all 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 py-4">
+    <div class="mobile-container">
+        <!-- 顶部品牌区域 -->
+        <div class="gradient-bg text-white p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="truck" class="w-6 h-6"></i>
+                    <span class="font-bold text-lg">Pickles × Loadshift</span>
+                </div>
+                <div class="flex items-center space-x-1 text-sm">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    <span>Auction ends: 2:15:30</span>
+                </div>
+            </div>
+            
+            <h1 id="page-title" class="text-2xl font-bold mb-2">Free Transport Quote</h1>
+            <p id="page-subtitle" class="text-white/80 text-sm">Get accurate transport cost estimates before bidding</p>
+        </div>
+
+        <!-- 页面内容 -->
+        <div class="p-6">
+            <!-- 状态1: 配送信息输入 -->
+            <div id="state-1" class="page-state">
+                <!-- Item Information Card -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-20 h-20 bg-gray-200 flex items-center justify-center">
+                            <i data-lucide="zap" class="w-8 h-8 text-yellow-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">JDC Thomson Powerlite Generator</h3>
+                            <p class="text-sm text-gray-600 mb-2">Auction ID: #PKL2023001</p>
+                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                <div class="flex items-center space-x-1">
+                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                    <span>Pickles Belmore, Sydney NSW</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-sm text-blue-600 font-medium">Estimated Value: $17,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Information Input -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="map-pin" class="w-5 h-5 mr-2 text-blue-600"></i>
+                        Delivery Information
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Address</label>
+                            <div class="relative">
+                                <input id="delivery-address" type="text" value="Temora, NSW 2666" 
+                                       class="w-full p-3 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <i data-lucide="check-circle" class="absolute right-3 top-3 w-5 h-5 text-green-500"></i>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Special Equipment Required</label>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="flex items-center space-x-2 bg-blue-50 px-3 py-2 cursor-pointer">
+                                    <input type="checkbox" checked class="text-blue-600">
+                                    <span class="text-sm">Crane</span>
+                                </label>
+                                <label class="flex items-center space-x-2 bg-gray-50 px-3 py-2 cursor-pointer">
+                                    <input type="checkbox" class="text-blue-600">
+                                    <span class="text-sm">Forklift</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Time Preference</label>
+                            <select id="delivery-time" class="w-full p-3 border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                <option>Weekdays (Monday to Friday)</option>
+                                <option>Weekends Available</option>
+                                <option>Express Delivery (Rush Fee)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 下一步按钮 -->
+                <button id="next-step-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="flex items-center justify-center space-x-2">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <span>Next Step - Smart Analysis</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- 状态2: AI智能分析 -->
+            <div id="state-2" class="hidden page-state">
+                <!-- AI Smart Analysis Area -->
+                <div id="ai-analysis" class="bg-white p-6 card-shadow mb-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center ai-pulse">
+                        <i data-lucide="brain" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-900">AI Smart Analysis</h3>
+                        <p class="text-sm text-gray-600">Finding optimal transport solutions for you...</p>
+                    </div>
+                </div>
+                
+                <!-- 分析进度 -->
+                <div class="mb-4">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span id="progress-text">Analyzing item specifications...</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- 分析步骤 -->
+                <div class="space-y-2 text-sm">
+                    <div id="step1" class="flex items-center space-x-2 text-gray-400">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <span>Searching item technical specifications</span>
+                        <i data-lucide="loader-2" class="w-4 h-4 animate-spin hidden"></i>
+                        <i data-lucide="check" class="w-4 h-4 text-green-500 hidden"></i>
+                    </div>
+                    <div id="step2" class="flex items-center space-x-2 text-gray-400">
+                        <i data-lucide="ruler" class="w-4 h-4"></i>
+                        <span>Analyzing dimensions and weight information</span>
+                        <i data-lucide="loader-2" class="w-4 h-4 animate-spin hidden"></i>
+                        <i data-lucide="check" class="w-4 h-4 text-green-500 hidden"></i>
+                    </div>
+                    <div id="step3" class="flex items-center space-x-2 text-gray-400">
+                        <i data-lucide="truck" class="w-4 h-4"></i>
+                        <span>Matching suitable transport equipment</span>
+                        <i data-lucide="loader-2" class="w-4 h-4 animate-spin hidden"></i>
+                        <i data-lucide="check" class="w-4 h-4 text-green-500 hidden"></i>
+                    </div>
+                    <div id="step4" class="flex items-center space-x-2 text-gray-400">
+                        <i data-lucide="map" class="w-4 h-4"></i>
+                        <span>Calculating optimal delivery routes</span>
+                        <i data-lucide="loader-2" class="w-4 h-4 animate-spin hidden"></i>
+                        <i data-lucide="check" class="w-4 h-4 text-green-500 hidden"></i>
+                    </div>
+                </div>
+                
+                <!-- 分析结果（初始隐藏） -->
+                <div id="analysis-result" class="hidden mt-6 p-4 bg-green-50 border border-green-200">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                        <span class="font-bold text-green-900">Analysis Complete!</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="package" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Item Specs: 2.1m×1.2m×1.5m</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="weight" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Estimated Weight: 850kg</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="truck" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Recommended: Flatbed + Crane</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="route" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Estimated Distance: 412km</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- 状态3: 分析结果和报价 -->
+            <div id="state-3" class="hidden page-state">
+                <!-- 分析结果展示 -->
+                <div class="bg-green-50 border border-green-200 p-6 mb-6">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                        <span class="font-bold text-green-900 text-lg">Analysis Complete!</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="package" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Item Specs: 2.1m×1.2m×1.5m</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="weight" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Estimated Weight: 850kg</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="truck" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Recommended: Flatbed + Crane</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="route" class="w-4 h-4 text-gray-600"></i>
+                            <span class="text-gray-700">Estimated Distance: 412km</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 价格预估 -->
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 card-shadow mb-6 border border-yellow-200">
+                <div class="text-center">
+                    <div class="flex items-center justify-center mb-2">
+                        <i data-lucide="zap" class="w-6 h-6 text-yellow-600 mr-2"></i>
+                        <h3 class="font-bold text-lg text-gray-900">即时预估价格范围</h3>
+                    </div>
+                    
+                    <div class="text-4xl font-bold price-highlight mb-2">$850 - $1,200</div>
+                    <p class="text-sm text-gray-600 mb-4">基于当前市场价格和运输要求</p>
+                    
+                    <div class="flex items-center justify-center space-x-4 text-sm text-gray-600">
+                        <div class="flex items-center space-x-1">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>12位认证承运商可服务此路线</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- 承运商分布地图 -->
+                <div id="carrier-map" class="bg-white p-6 card-shadow mb-6">
+                <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                    <i data-lucide="map" class="w-5 h-5 mr-2 text-blue-600"></i>
+                    Carrier Distribution
+                </h3>
+                
+                <div class="bg-blue-50 p-4 relative">
+                    <!-- 简化地图 -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 bg-blue-600 rounded-full mb-1"></div>
+                            <span class="text-xs text-gray-600">Sydney</span>
+                            <span class="text-xs text-gray-500">Belmore</span>
+                        </div>
+                        
+                        <div class="flex-1 mx-4">
+                            <div class="route-line">
+                                <!-- 沿途承运商标记 -->
+                                <div class="carrier-dot" style="left: 20%; top: -5px;"></div>
+                                <div class="carrier-dot" style="left: 45%; top: -5px;"></div>
+                                <div class="carrier-dot" style="left: 70%; top: -5px;"></div>
+                            </div>
+                            <div class="text-center text-xs text-gray-600 mt-2">
+                                <i data-lucide="truck" class="w-4 h-4 inline mr-1"></i>
+                                412 km • 约5.5小时车程
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="w-4 h-4 bg-green-600 rounded-full mb-1"></div>
+                            <span class="text-xs text-gray-600">Temora</span>
+                            <span class="text-xs text-gray-500">NSW</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-sm text-gray-600">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span>可用承运商位置</span>
+                    </div>
+                    <p class="text-xs">沿途共有12位Pickles认证承运商可提供服务</p>
+                </div>
+            </div>
+
+                <!-- CTA按钮区域 -->
+                <div id="cta-section" class="space-y-4">
+                <button id="get-quote-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="flex items-center justify-center space-x-2">
+                        <i data-lucide="truck" class="w-5 h-5"></i>
+                        <span>获取详细报价（免费）</span>
+                    </div>
+                </button>
+                
+                <div class="bg-blue-50 p-4">
+                    <div class="flex items-center space-x-2 text-blue-800 mb-2">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                        <span class="font-semibold">60分钟SLA承诺</span>
+                    </div>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>自动为您匹配最优承运商</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>提供3个价格/时效选项</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>AI专员致电确认配送详情</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="text-center space-y-2">
+                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i>
+                        <span>安全保障：托管付款，配送完成后才扣费</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+                        <i data-lucide="star" class="w-4 h-4 text-yellow-500"></i>
+                        <span>Pickles认证承运商，专业可靠</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-600">
+                        <i data-lucide="phone" class="w-4 h-4 text-blue-600"></i>
+                        <span>24/7客服热线：1800 LOADSHIFT</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- State 4: Completion Status -->
+            <div id="state-4" class="hidden page-state">
+                <!-- Success Status Display -->
+                <div class="text-center py-8">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Quote Request Submitted!</h2>
+                    <p class="text-gray-600 mb-8">Our AI system is matching you with the optimal transport solution</p>
+                    
+                    <!-- SLA Promise Card -->
+                    <div class="bg-blue-50 p-6 mb-6 text-left">
+                        <div class="flex items-center space-x-2 text-blue-800 mb-4">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                            <h3 class="font-bold text-lg">Our 60-Minute SLA Promise</h3>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-blue-800">1</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-blue-900">Automatic Carrier Matching</div>
+                                    <div class="text-sm text-blue-700">AI analyzes 12 available carriers, selecting the 3 best options</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-blue-800">2</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-blue-900">Smart Quote Generation</div>
+                                    <div class="text-sm text-blue-700">Provides cheapest, fastest, and highest-rated options for your choice</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-blue-800">3</span>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-blue-900">AI Agent Call Confirmation</div>
+                                    <div class="text-sm text-blue-700">After successful bidding, AI assistant will proactively call to confirm delivery details</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Next Steps -->
+                    <div class="bg-gray-50 p-6 mb-6 text-left">
+                        <h3 class="font-bold text-gray-900 mb-3 flex items-center">
+                            <i data-lucide="list" class="w-5 h-5 mr-2 text-gray-600"></i>
+                            What happens next?
+                        </h3>
+                        <div class="space-y-2 text-sm text-gray-700">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="clock" class="w-4 h-4 text-blue-600"></i>
+                                <span>You can continue participating in the auction, no need to wait</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="phone" class="w-4 h-4 text-blue-600"></i>
+                                <span>AI will call within 60 minutes after successful bidding</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="truck" class="w-4 h-4 text-blue-600"></i>
+                                <span>Immediate pickup arrangement after confirming transport details</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Return to Auction Button -->
+                    <button class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                            <span>Return to Auction Page</span>
+                        </div>
+                    </button>
+                    
+                    <!-- Customer Service Contact -->
+                    <div class="mt-6 text-center text-sm text-gray-600">
+                        <p>Questions? Contact our 24/7 customer service</p>
+                        <div class="flex items-center justify-center space-x-4 mt-2">
+                            <a href="tel:1800LOADSHIFT" class="flex items-center space-x-1 text-blue-600 hover:underline">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                                <span>1800 LOADSHIFT</span>
+                            </a>
+                            <a href="mailto:support@loadshift.com.au" class="flex items-center space-x-1 text-blue-600 hover:underline">
+                                <i data-lucide="mail" class="w-4 h-4"></i>
+                                <span>Online Support</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 初始化Lucide图标
+        lucide.createIcons();
+        
+        // 页面状态管理
+        let currentState = 1;
+        
+        // 切换页面状态
+        function switchToState(state) {
+            // 隐藏所有状态
+            for (let i = 1; i <= 4; i++) {
+                const stateEl = document.getElementById(`state-${i}`);
+                if (stateEl) {
+                    stateEl.classList.add('hidden');
+                }
+            }
+            
+            // 显示目标状态
+            const targetState = document.getElementById(`state-${state}`);
+            if (targetState) {
+                targetState.classList.remove('hidden');
+                targetState.classList.add('fade-in');
+            }
+            
+            // 更新标题
+            const title = document.getElementById('page-title');
+            const subtitle = document.getElementById('page-subtitle');
+            
+            switch(state) {
+                case 1:
+                    title.textContent = 'Free Transport Quote';
+                    subtitle.textContent = 'Get accurate transport cost estimates before bidding';
+                    break;
+                case 2:
+                    title.textContent = 'AI Smart Analysis in Progress...';
+                    subtitle.textContent = 'Finding optimal transport solutions for you';
+                    break;
+                case 3:
+                    title.textContent = 'Quote Analysis Complete';
+                    subtitle.textContent = 'Found the best transport options for you';
+                    break;
+                case 4:
+                    title.textContent = 'Quote Request Submitted';
+                    subtitle.textContent = 'We will arrange the optimal solution within 60 minutes';
+                    break;
+            }
+            
+            currentState = state;
+        }
+        
+        // AI分析动画
+        function startAnalysis() {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            const progressTexts = [
+                'Searching item technical specifications...',
+                'Analyzing dimensions and weight information...',
+                'Matching suitable transport equipment...',
+                'Calculating optimal delivery routes...'
+            ];
+            
+            // 步骤时间分配（秒）
+            const stepDurations = [2.5, 3.2, 2.8, 3.5]; // 每个步骤的持续时间
+            const totalDuration = stepDurations.reduce((a, b) => a + b, 0);
+            let currentStep = 0;
+            let progress = 0;
+            let startTime = Date.now();
+            let stepStartTime = startTime;
+            
+            // 开始第一个步骤
+            const firstStepEl = document.getElementById(steps[0]);
+            firstStepEl.classList.remove('text-gray-400');
+            firstStepEl.classList.add('text-blue-600');
+            firstStepEl.querySelector('.animate-spin').classList.remove('hidden');
+            document.getElementById('progress-text').textContent = progressTexts[0];
+            
+            const progressInterval = setInterval(() => {
+                const now = Date.now();
+                const totalElapsed = (now - startTime) / 1000;
+                const stepElapsed = (now - stepStartTime) / 1000;
+                
+                // 计算总进度
+                let targetProgress = Math.min((totalElapsed / totalDuration) * 100, 100);
+                
+                // 渐进更新进度条
+                if (progress < targetProgress) {
+                    progress = Math.min(progress + 0.8, targetProgress);
+                }
+                
+                document.getElementById('progress-bar').style.width = progress + '%';
+                document.getElementById('progress-percent').textContent = Math.floor(progress) + '%';
+                
+                // 检查是否需要切换步骤
+                if (currentStep < steps.length - 1 && stepElapsed >= stepDurations[currentStep]) {
+                    // 完成当前步骤
+                    const currentStepEl = document.getElementById(steps[currentStep]);
+                    currentStepEl.classList.remove('text-blue-600');
+                    currentStepEl.classList.add('text-green-600');
+                    currentStepEl.querySelector('.animate-spin').classList.add('hidden');
+                    currentStepEl.querySelector('.text-green-500').classList.remove('hidden');
+                    
+                    // 开始下一步骤
+                    currentStep++;
+                    stepStartTime = now;
+                    
+                    if (currentStep < steps.length) {
+                        const nextStepEl = document.getElementById(steps[currentStep]);
+                        nextStepEl.classList.remove('text-gray-400');
+                        nextStepEl.classList.add('text-blue-600');
+                        nextStepEl.querySelector('.animate-spin').classList.remove('hidden');
+                        
+                        document.getElementById('progress-text').textContent = progressTexts[currentStep];
+                    }
+                }
+                
+                // 完成所有步骤
+                if (totalElapsed >= totalDuration) {
+                    clearInterval(progressInterval);
+                    progress = 100;
+                    
+                    document.getElementById('progress-bar').style.width = '100%';
+                    document.getElementById('progress-percent').textContent = '100%';
+                    
+                    // 完成最后一个步骤
+                    const lastStep = document.getElementById(steps[steps.length - 1]);
+                    lastStep.classList.remove('text-blue-600');
+                    lastStep.classList.add('text-green-600');
+                    lastStep.querySelector('.animate-spin').classList.add('hidden');
+                    lastStep.querySelector('.text-green-500').classList.remove('hidden');
+                    
+                    document.getElementById('progress-text').textContent = 'Analysis Complete!';
+                    
+                    // 显示分析结果
+                    setTimeout(() => {
+                        document.getElementById('analysis-result').classList.remove('hidden');
+                        
+                        // 延迟一下再切换到结果状态
+                        setTimeout(() => {
+                            switchToState(3);
+                            setupQuoteButton();
+                        }, 2000);
+                    }, 800);
+                }
+            }, 50);
+        }
+        
+        // 下一步按钮事件
+        function setupNextStepButton() {
+            const btn = document.getElementById('next-step-btn');
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    // 验证表单
+                    const address = document.getElementById('delivery-address').value.trim();
+                    if (!address) {
+                        alert('Please enter delivery address');
+                        return;
+                    }
+                    
+                    // 切换到分析状态并开始AI分析
+                    switchToState(2);
+                    setTimeout(() => {
+                        startAnalysis();
+                    }, 500);
+                });
+            }
+        }
+        
+        // 获取报价按钮点击事件
+        function setupQuoteButton() {
+            const btn = document.getElementById('get-quote-btn');
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    // 切换到完成状态（模拟页面刷新）
+                    switchToState(4);
+                });
+            }
+        }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保初始状态正确
+            switchToState(1);
+            setupNextStepButton();
+        });
+    </script>
+</body>
+</html>
