@@ -133,6 +133,39 @@
         .content-padding-bottom {
             padding-bottom: 120px;
         }
+        
+        /* QR扫描动画 */
+        .qr-scanner {
+            position: relative;
+            border: 3px solid #3b82f6;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .scanner-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            position: absolute;
+            top: 0;
+            animation: scan 2s infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        /* 扫描成功动画 */
+        .scan-success {
+            animation: scanSuccess 0.6s ease-out;
+        }
+        
+        @keyframes scanSuccess {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 py-4">
@@ -156,7 +189,7 @@
 
         <div class="p-6">
             <!-- State 1: Driver Arrival & QR Code Display -->
-            <div id="state-1" class="page-state">
+            <div id="state-1" class="page-state content-padding-bottom">
                 <!-- Order Summary Card -->
                 <div class="bg-white p-6 card-shadow mb-6">
                     <div class="flex items-center space-x-3 mb-4">
@@ -196,14 +229,20 @@
                         Show this QR Code to Security
                     </h3>
                     
-                    <div id="qr-container" class="qr-container mb-4">
-                        <img src="../assets/images/qrcode.png" alt="QR Code for Pickup Verification" 
-                             class="w-48 h-48 mx-auto" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <div class="w-48 h-48 mx-auto bg-gray-200 flex items-center justify-center" style="display: none;">
-                            <i data-lucide="qr-code" class="w-16 h-16 text-gray-400"></i>
+                    <div id="qr-scanner" class="qr-scanner w-64 h-64 mx-auto mb-6 flex items-center justify-center bg-gray-100">
+                        <div class="scanner-line"></div>
+                        <div class="w-full h-full flex items-center justify-center">
+                            <img src="../assets/images/qrcode.png" alt="QR Code for Pickup Verification" 
+                                 class="w-40 h-40 object-contain" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="w-40 h-40 flex items-center justify-center" style="display: none;">
+                                <i data-lucide="qr-code" class="w-16 h-16 text-gray-400"></i>
+                            </div>
                         </div>
-                        <p class="text-sm text-gray-600 mt-3">
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600">
                             Verification Code: <span class="font-mono font-bold text-blue-600">PKL-AUTH-001-MT</span>
                         </p>
                     </div>
@@ -218,13 +257,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <button id="security-check-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
-                    <div class="flex items-center justify-center space-x-2">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
-                        <span>Begin Security Verification</span>
-                    </div>
-                </button>
             </div>
 
             <!-- State 2: Security Verification Process -->
@@ -505,6 +537,15 @@
         </div>
 
         <!-- Floating Action Buttons -->
+        <div id="floating-cta-1" class="floating-cta">
+            <button id="security-check-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                <div class="flex items-center justify-center space-x-2">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    <span>Begin Security Verification</span>
+                </div>
+            </button>
+        </div>
+
         <div id="floating-cta-3" class="floating-cta hidden">
             <button id="continue-video-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
                 <div class="flex items-center justify-center space-x-2">
@@ -556,6 +597,7 @@
                 case 1:
                     title.textContent = 'Pickup Authentication';
                     subtitle.textContent = 'Secure verification process for item collection';
+                    document.getElementById('floating-cta-1').classList.remove('hidden');
                     break;
                 case 2:
                     title.textContent = 'Security Verification';
@@ -578,6 +620,36 @@
             }
             
             currentState = state;
+        }
+        
+        // QR扫描模拟
+        function simulateQRScan() {
+            const scanBtn = document.getElementById('security-check-btn');
+            const scanner = document.getElementById('qr-scanner');
+            
+            // 隐藏浮动按钮
+            document.getElementById('floating-cta-1').classList.add('hidden');
+            
+            scanBtn.innerHTML = `<div class="flex items-center justify-center space-x-2">
+                <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+                <span>Scanning QR Code...</span>
+            </div>`;
+            scanBtn.disabled = true;
+            
+            // 模拟扫描过程
+            setTimeout(() => {
+                scanner.innerHTML = `<div class="text-center scan-success">
+                    <i data-lucide="check-circle" class="w-24 h-24 text-green-600 mb-4 mx-auto"></i>
+                    <p class="text-lg font-bold text-green-600">QR Code Verified!</p>
+                    <p class="text-sm text-gray-600">Security verification confirmed</p>
+                </div>`;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    switchToState(2);
+                    setTimeout(startSecurityVerification, 500);
+                }, 1500);
+            }, 2000);
         }
         
         // Security Verification Animation
@@ -713,8 +785,7 @@
         
         // Event Listeners
         document.getElementById('security-check-btn').addEventListener('click', function() {
-            switchToState(2);
-            setTimeout(startSecurityVerification, 500);
+            simulateQRScan();
         });
         
         document.getElementById('continue-video-btn').addEventListener('click', function() {

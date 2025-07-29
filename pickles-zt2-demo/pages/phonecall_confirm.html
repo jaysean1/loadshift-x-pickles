@@ -52,8 +52,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 60px 40px 80px;
+            justify-content: center;
+            padding: 60px 40px 140px; /* 增加底部padding为浮层按钮留空间 */
             color: white;
             text-align: center;
         }
@@ -101,13 +101,21 @@
             color: rgba(255, 255, 255, 0.8);
         }
         
-        /* 通话按钮样式 */
+        /* 通话按钮样式 - 改为浮层 */
         .call-controls {
+            position: fixed;
+            bottom: 20px; /* 距离iPhone底部的距离 */
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            width: 100%;
-            max-width: 300px;
+            width: 300px;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 20px;
         }
         
         .call-button {
@@ -142,7 +150,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 60px 40px 80px;
+            padding: 60px 40px 140px; /* 增加底部padding为浮层按钮留空间 */
             color: white;
             text-align: center;
         }
@@ -210,12 +218,19 @@
         
         
         .end-call-controls {
+            position: fixed;
+            bottom: 120px; /* 距离iPhone底部的距离 */
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
-            width: 100%;
-            max-width: 300px;
-            flex-shrink: 0;
+            width: 120px;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 20px;
         }
         
         .end-call-btn {
@@ -387,9 +402,8 @@
             // 停止计时器
             stopCallTimer();
             
-            // 挂断后跳转到订单确认页面
-            // 这里添加跳转逻辑
-            window.location.href = 'order_confirmation.html';
+            // 停留在当前页面，不进行跳转
+            console.log('Call ended - staying on current page');
         });
         
         // 页面加载完成
