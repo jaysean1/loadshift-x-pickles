@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Complete - Pickles × Loadshift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* 自定义样式 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-state {
+            transition: all 0.4s ease-in-out;
+        }
+        
+        /* QR扫描动画 */
+        .qr-scanner {
+            position: relative;
+            border: 3px solid #3b82f6;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .scanner-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            position: absolute;
+            top: 0;
+            animation: scan 2s infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        /* 照片查看器样式 */
+        .photo-gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding: 0 24px;
+        }
+        
+        .photo-gallery::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .photo-item {
+            flex: 0 0 280px;
+            scroll-snap-align: center;
+        }
+        
+        /* 签名样式 */
+        .signature-display {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 2rem;
+            color: #1e40af;
+            transform: rotate(-2deg);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* 星级评分样式 */
+        .star-rating {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .star {
+            cursor: pointer;
+            color: #d1d5db;
+            transition: color 0.2s;
+        }
+        
+        .star.active {
+            color: #fbbf24;
+        }
+        
+        /* 扫描成功动画 */
+        .scan-success {
+            animation: scanSuccess 0.6s ease-out;
+        }
+        
+        @keyframes scanSuccess {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* 按钮悬浮效果 */
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 py-4">
+    <div class="mobile-container">
+        <!-- 顶部品牌区域 -->
+        <div class="gradient-bg text-white p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="truck" class="w-6 h-6"></i>
+                    <span class="font-bold text-lg">Pickles × Loadshift</span>
+                </div>
+                <div class="flex items-center space-x-1 text-sm">
+                    <i data-lucide="package-check" class="w-4 h-4"></i>
+                    <span>Delivery ID: #DLV2023001</span>
+                </div>
+            </div>
+            
+            <h1 id="page-title" class="text-2xl font-bold mb-2">Delivery Confirmation</h1>
+            <p id="page-subtitle" class="text-white/80 text-sm">Complete your delivery and release payment</p>
+        </div>
+
+        <!-- 页面内容 -->
+        <div class="p-6">
+            <!-- 状态1: QR码扫描 -->
+            <div id="state-1" class="page-state">
+                <!-- 司机信息卡片 -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+                            <img src="https://source.unsplash.com/64x64/?man,driver,portrait" 
+                                 alt="Driver Photo" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg text-gray-900">Michael Chen</h3>
+                            <p class="text-sm text-gray-600 mb-1">Certified Loadshift Driver</p>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-yellow-400">
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                </div>
+                                <span class="text-sm text-gray-600">(4.9 • 127 deliveries)</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mb-2"></div>
+                            <span class="text-xs text-gray-600">Online</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR扫描区域 -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <div class="text-center mb-6">
+                        <h3 class="font-bold text-lg text-gray-900 mb-2">Scan Delivery QR Code</h3>
+                        <p class="text-sm text-gray-600">Ask the driver to show their delivery confirmation QR code</p>
+                    </div>
+                    
+                    <div id="qr-scanner" class="qr-scanner w-64 h-64 mx-auto mb-6 flex items-center justify-center bg-gray-100">
+                        <div class="scanner-line"></div>
+                        <div class="text-center">
+                            <i data-lucide="qr-code" class="w-24 h-24 text-gray-400 mb-4 mx-auto"></i>
+                            <p class="text-sm text-gray-600">Position QR code in the frame</p>
+                        </div>
+                    </div>
+                    
+                    <button id="scan-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg btn-hover">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="scan" class="w-5 h-5"></i>
+                            <span>Start Scanning</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 状态2: 照片查看 -->
+            <div id="state-2" class="hidden page-state">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="camera" class="w-5 h-5 mr-2 text-blue-600"></i>
+                        Delivery Photos Review
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">Please review the delivery photos taken by the driver</p>
+                    
+                    <div class="photo-gallery mb-6">
+                        <div class="photo-item">
+                            <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
+                                <img src="https://source.unsplash.com/280x200/?truck,loading,equipment" 
+                                     alt="Loading Photo" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Loading at Pickles</span>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" checked class="text-green-600" readonly>
+                                    <span class="text-sm text-green-600">Verified</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-item">
+                            <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
+                                <img src="https://source.unsplash.com/280x200/?highway,transport,truck" 
+                                     alt="Transport Photo" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">En Route</span>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" checked class="text-green-600" readonly>
+                                    <span class="text-sm text-green-600">Verified</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-item">
+                            <div class="bg-gray-100 rounded-lg overflow-hidden mb-3">
+                                <img src="https://source.unsplash.com/280x200/?delivery,warehouse,unloading" 
+                                     alt="Delivery Photo" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Delivery Site</span>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" checked class="text-green-600" readonly>
+                                    <span class="text-sm text-green-600">Verified</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center text-sm text-gray-600 mb-6">
+                        <p>Swipe left/right to view all photos</p>
+                    </div>
+                    
+                    <button id="photos-confirm-btn" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 font-bold text-lg btn-hover">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            <span>Photos Look Good - Continue</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 状态3: 数字签名 -->
+            <div id="state-3" class="hidden page-state">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="pen-tool" class="w-5 h-5 mr-2 text-blue-600"></i>
+                        Digital Signature
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">Please provide your digital signature to confirm receipt</p>
+                    
+                    <div id="signature-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-6 text-center bg-gray-50 min-h-[120px] flex items-center justify-center">
+                        <div id="signature-placeholder">
+                            <i data-lucide="edit" class="w-12 h-12 text-gray-400 mb-2 mx-auto"></i>
+                            <p class="text-gray-500">Click "Sign Here" to add your signature</p>
+                        </div>
+                        <div id="signature-display" class="signature-display hidden">
+                            John Smith
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4 mb-6">
+                        <button id="sign-btn" class="flex-1 bg-blue-600 text-white py-3 px-4 font-semibold btn-hover">
+                            <div class="flex items-center justify-center space-x-2">
+                                <i data-lucide="pen-tool" class="w-5 h-5"></i>
+                                <span>Sign Here</span>
+                            </div>
+                        </button>
+                        <button id="clear-signature-btn" class="px-4 py-3 border border-gray-300 text-gray-700 font-semibold btn-hover hidden">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <button id="signature-confirm-btn" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-6 font-bold text-lg btn-hover hidden">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            <span>Confirm Signature</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 状态4: 付款确认 -->
+            <div id="state-4" class="hidden page-state">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="credit-card" class="w-5 h-5 mr-2 text-blue-600"></i>
+                        Payment Release
+                    </h3>
+                    
+                    <!-- 费用明细 -->
+                    <div class="bg-gray-50 p-4 mb-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Transport Fee</span>
+                                <span class="text-gray-900">$945.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Crane Service</span>
+                                <span class="text-gray-900">$150.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Insurance</span>
+                                <span class="text-gray-900">$35.00</span>
+                            </div>
+                            <div class="border-t pt-3 flex justify-between font-bold">
+                                <span class="text-gray-900">Total Amount</span>
+                                <span class="text-blue-600 text-lg">$1,130.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 托管保护提示 -->
+                    <div class="bg-green-50 border border-green-200 p-4 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-green-600 flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-green-900 mb-2">Secure Escrow Protection</h4>
+                                <p class="text-sm text-green-800">Your payment has been held in escrow and will be released to the driver only after you confirm successful delivery.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="payment-confirm-btn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 px-6 font-bold text-lg btn-hover">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="unlock" class="w-5 h-5"></i>
+                            <span>Release Payment - $1,130.00</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 状态5: 完成和评分 -->
+            <div id="state-5" class="hidden page-state">
+                <!-- 成功状态 -->
+                <div class="text-center py-8 mb-6">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 scan-success">
+                        <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Delivery Complete!</h2>
+                    <p class="text-gray-600 mb-8">Payment has been released and your order is now complete</p>
+                </div>
+                
+                <!-- 评分系统 -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="star" class="w-5 h-5 mr-2 text-yellow-500"></i>
+                        Rate Your Experience
+                    </h3>
+                    
+                    <div class="text-center mb-6">
+                        <p class="text-sm text-gray-600 mb-4">How was your delivery experience with Michael?</p>
+                        <div class="star-rating justify-center mb-4">
+                            <i data-lucide="star" class="star w-10 h-10" data-rating="1"></i>
+                            <i data-lucide="star" class="star w-10 h-10" data-rating="2"></i>
+                            <i data-lucide="star" class="star w-10 h-10" data-rating="3"></i>
+                            <i data-lucide="star" class="star w-10 h-10" data-rating="4"></i>
+                            <i data-lucide="star" class="star w-10 h-10" data-rating="5"></i>
+                        </div>
+                        <p id="rating-text" class="text-sm text-gray-500 mb-4">Click to rate</p>
+                    </div>
+                    
+                    <textarea id="feedback-text" placeholder="Optional: Share feedback about your delivery experience" 
+                              class="w-full p-3 border border-gray-300 mb-4 resize-none h-24"></textarea>
+                    
+                    <button id="submit-rating-btn" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-4 px-6 font-bold text-lg btn-hover">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            <span>Submit Rating</span>
+                        </div>
+                    </button>
+                </div>
+                
+                <!-- 下一步操作 -->
+                <div class="bg-gray-50 p-6 text-center">
+                    <h3 class="font-bold text-gray-900 mb-3">What's Next?</h3>
+                    <div class="space-y-2 text-sm text-gray-700 mb-6">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-600"></i>
+                            <span>Delivery receipt sent to your email</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
+                            <span>Tax invoice available in your account</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="truck" class="w-4 h-4 text-blue-600"></i>
+                            <span>Book your next transport with Pickles ZT2</span>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg btn-hover">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                            <span>Return to Pickles Auctions</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化Lucide图标
+        lucide.createIcons();
+        
+        // 页面状态管理
+        let currentState = 1;
+        let currentRating = 0;
+        
+        // 切换页面状态
+        function switchToState(state) {
+            // 隐藏所有状态
+            for (let i = 1; i <= 5; i++) {
+                const stateEl = document.getElementById(`state-${i}`);
+                if (stateEl) {
+                    stateEl.classList.add('hidden');
+                }
+            }
+            
+            // 显示目标状态
+            const targetState = document.getElementById(`state-${state}`);
+            if (targetState) {
+                targetState.classList.remove('hidden');
+                targetState.classList.add('fade-in');
+            }
+            
+            // 更新标题
+            const title = document.getElementById('page-title');
+            const subtitle = document.getElementById('page-subtitle');
+            
+            switch(state) {
+                case 1:
+                    title.textContent = 'Delivery Confirmation';
+                    subtitle.textContent = 'Complete your delivery and release payment';
+                    break;
+                case 2:
+                    title.textContent = 'Review Delivery Photos';
+                    subtitle.textContent = 'Verify the condition of your delivered item';
+                    break;
+                case 3:
+                    title.textContent = 'Digital Signature';
+                    subtitle.textContent = 'Confirm receipt with your signature';
+                    break;
+                case 4:
+                    title.textContent = 'Payment Release';
+                    subtitle.textContent = 'Review charges and release escrow payment';
+                    break;
+                case 5:
+                    title.textContent = 'Delivery Complete';
+                    subtitle.textContent = 'Rate your experience and finish';
+                    break;
+            }
+            
+            currentState = state;
+        }
+        
+        // QR扫描模拟
+        function simulateQRScan() {
+            const scanBtn = document.getElementById('scan-btn');
+            const scanner = document.getElementById('qr-scanner');
+            
+            scanBtn.textContent = 'Scanning...';
+            scanBtn.disabled = true;
+            
+            // 模拟扫描过程
+            setTimeout(() => {
+                scanner.innerHTML = `<div class="text-center scan-success">
+                    <i data-lucide="check-circle" class="w-24 h-24 text-green-600 mb-4 mx-auto"></i>
+                    <p class="text-lg font-bold text-green-600">QR Code Verified!</p>
+                    <p class="text-sm text-gray-600">Driver identity confirmed</p>
+                </div>`;
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    switchToState(2);
+                }, 1500);
+            }, 2000);
+        }
+        
+        // 数字签名模拟
+        function simulateSignature() {
+            const placeholder = document.getElementById('signature-placeholder');
+            const display = document.getElementById('signature-display');
+            const signBtn = document.getElementById('sign-btn');
+            const clearBtn = document.getElementById('clear-signature-btn');
+            const confirmBtn = document.getElementById('signature-confirm-btn');
+            
+            placeholder.classList.add('hidden');
+            display.classList.remove('hidden');
+            signBtn.textContent = 'Signed ✓';
+            signBtn.disabled = true;
+            clearBtn.classList.remove('hidden');
+            confirmBtn.classList.remove('hidden');
+        }
+        
+        // 清除签名
+        function clearSignature() {
+            const placeholder = document.getElementById('signature-placeholder');
+            const display = document.getElementById('signature-display');
+            const signBtn = document.getElementById('sign-btn');
+            const clearBtn = document.getElementById('clear-signature-btn');
+            const confirmBtn = document.getElementById('signature-confirm-btn');
+            
+            placeholder.classList.remove('hidden');
+            display.classList.add('hidden');
+            signBtn.textContent = 'Sign Here';
+            signBtn.disabled = false;
+            clearBtn.classList.add('hidden');
+            confirmBtn.classList.add('hidden');
+        }
+        
+        // 星级评分系统
+        function initRatingSystem() {
+            const stars = document.querySelectorAll('.star');
+            const ratingText = document.getElementById('rating-text');
+            
+            const ratingTexts = [
+                'Click to rate',
+                'Poor - 1 star',
+                'Fair - 2 stars', 
+                'Good - 3 stars',
+                'Very Good - 4 stars',
+                'Excellent - 5 stars'
+            ];
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    currentRating = rating;
+                    
+                    // 更新星星显示
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    ratingText.textContent = ratingTexts[rating];
+                });
+                
+                // 悬停效果
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#fbbf24';
+                        } else {
+                            s.style.color = '#d1d5db';
+                        }
+                    });
+                });
+            });
+            
+            // 鼠标离开时恢复当前评分
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                stars.forEach((s, index) => {
+                    if (index < currentRating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // 事件监听器设置
+        function setupEventListeners() {
+            // QR扫描按钮
+            document.getElementById('scan-btn').addEventListener('click', simulateQRScan);
+            
+            // 照片确认按钮
+            document.getElementById('photos-confirm-btn').addEventListener('click', () => {
+                switchToState(3);
+            });
+            
+            // 签名按钮
+            document.getElementById('sign-btn').addEventListener('click', simulateSignature);
+            
+            // 清除签名按钮
+            document.getElementById('clear-signature-btn').addEventListener('click', clearSignature);
+            
+            // 签名确认按钮
+            document.getElementById('signature-confirm-btn').addEventListener('click', () => {
+                switchToState(4);
+            });
+            
+            // 付款确认按钮
+            document.getElementById('payment-confirm-btn').addEventListener('click', () => {
+                const btn = document.getElementById('payment-confirm-btn');
+                btn.innerHTML = `<div class="flex items-center justify-center space-x-2">
+                    <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+                    <span>Processing Payment...</span>
+                </div>`;
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    switchToState(5);
+                }, 2000);
+            });
+            
+            // 评分提交按钮
+            document.getElementById('submit-rating-btn').addEventListener('click', () => {
+                const feedback = document.getElementById('feedback-text').value;
+                const btn = document.getElementById('submit-rating-btn');
+                
+                if (currentRating === 0) {
+                    alert('Please select a rating before submitting');
+                    return;
+                }
+                
+                btn.innerHTML = `<div class="flex items-center justify-center space-x-2">
+                    <i data-lucide="check" class="w-5 h-5"></i>
+                    <span>Thank You!</span>
+                </div>`;
+                btn.disabled = true;
+                btn.classList.add('bg-green-600');
+                
+                // 模拟提交成功
+                setTimeout(() => {
+                    alert('Thank you for your feedback! Your rating has been submitted.');
+                }, 500);
+            });
+        }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            switchToState(1);
+            setupEventListeners();
+            initRatingSystem();
+        });
+    </script>
+</body>
+</html>

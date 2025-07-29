@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Authentication - Pickles × Loadshift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .page-state {
+            transition: all 0.4s ease-in-out;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .upload-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+        
+        .upload-area.dragover {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .photo-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+            transition: width 0.3s ease;
+            height: 6px;
+            border-radius: 3px;
+        }
+        
+        .verification-step {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .verification-step.active {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+        
+        .verification-step.completed {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .gps-indicator {
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: gps-pulse 2s infinite;
+        }
+        
+        @keyframes gps-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        
+        .floating-cta {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            z-index: 50;
+        }
+        
+        .content-padding-bottom {
+            padding-bottom: 120px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 py-4">
+    <div class="mobile-container">
+        <!-- Header -->
+        <div class="gradient-bg text-white p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="truck" class="w-6 h-6"></i>
+                    <span class="font-bold text-lg">Pickles × Loadshift</span>
+                </div>
+                <div class="flex items-center space-x-1 text-sm">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Verified Driver</span>
+                </div>
+            </div>
+            
+            <h1 id="page-title" class="text-2xl font-bold mb-2">Pickup Authentication</h1>
+            <p id="page-subtitle" class="text-white/80 text-sm">Secure verification process for item collection</p>
+        </div>
+
+        <div class="p-6">
+            <!-- State 1: Driver Arrival & QR Code Display -->
+            <div id="state-1" class="page-state">
+                <!-- Order Summary Card -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i data-lucide="package" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900">Order #PKL2023001</h3>
+                            <p class="text-sm text-gray-600">Lincoln Air Vantage 500 Generator</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Pickup Location:</span>
+                            <span class="font-medium">Pickles Belmore, Sydney NSW</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Delivery Address:</span>
+                            <span class="font-medium">Temora, NSW 2666</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Driver:</span>
+                            <span class="font-medium">Michael Thompson</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Vehicle:</span>
+                            <span class="font-medium">Flatbed Truck (Rego: ABC123)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Display -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4 text-center">
+                        <i data-lucide="qr-code" class="w-5 h-5 mr-2 text-blue-600 inline"></i>
+                        Show this QR Code to Security
+                    </h3>
+                    
+                    <div id="qr-container" class="qr-container mb-4">
+                        <img src="../assets/images/qrcode.png" alt="QR Code for Pickup Verification" 
+                             class="w-48 h-48 mx-auto" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="w-48 h-48 mx-auto bg-gray-200 flex items-center justify-center" style="display: none;">
+                            <i data-lucide="qr-code" class="w-16 h-16 text-gray-400"></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            Verification Code: <span class="font-mono font-bold text-blue-600">PKL-AUTH-001-MT</span>
+                        </p>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 border border-blue-200">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+                            <div class="text-sm">
+                                <p class="font-semibold text-blue-900 mb-1">Instructions:</p>
+                                <p class="text-blue-700">Present this QR code to the security guard for verification. Ensure you have your driver's license and vehicle registration ready for inspection.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="security-check-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                    <div class="flex items-center justify-center space-x-2">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <span>Begin Security Verification</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- State 2: Security Verification Process -->
+            <div id="state-2" class="hidden page-state">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="shield-check" class="w-8 h-8 text-green-600"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-gray-900 mb-2">Security Verification</h3>
+                        <p class="text-gray-600">Please wait while security processes your credentials</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div id="verify-step-1" class="verification-step active">
+                            <div class="flex items-center space-x-3">
+                                <div id="verify-icon-1" class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                                    <i data-lucide="loader-2" class="w-4 h-4 text-white animate-spin"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-gray-900">QR Code Verification</div>
+                                    <div class="text-sm text-gray-600">Validating pickup authorization</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="verify-step-2" class="verification-step">
+                            <div class="flex items-center space-x-3">
+                                <div id="verify-icon-2" class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <i data-lucide="user-check" class="w-4 h-4 text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-gray-600">Driver ID Check</div>
+                                    <div class="text-sm text-gray-500">Verifying driver credentials</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="verify-step-3" class="verification-step">
+                            <div class="flex items-center space-x-3">
+                                <div id="verify-icon-3" class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <i data-lucide="truck" class="w-4 h-4 text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-gray-600">Vehicle Registration</div>
+                                    <div class="text-sm text-gray-500">Confirming transport vehicle details</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 3: Photo Documentation -->
+            <div id="state-3" class="hidden page-state content-padding-bottom">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4">
+                        <i data-lucide="camera" class="w-5 h-5 mr-2 text-blue-600 inline"></i>
+                        Item Documentation
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">Take photos from multiple angles to document the item's condition before loading</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="text-center">
+                            <div id="photo-1" class="upload-area mb-2" onclick="triggerPhotoUpload(1)">
+                                <div id="photo-1-placeholder">
+                                    <i data-lucide="camera" class="w-8 h-8 text-gray-400 mx-auto mb-2"></i>
+                                    <p class="text-sm text-gray-600">Front View</p>
+                                </div>
+                                <img id="photo-1-preview" class="photo-preview mx-auto hidden" alt="Front view">
+                            </div>
+                            <div id="photo-1-status" class="text-xs text-gray-500">Required</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div id="photo-2" class="upload-area mb-2" onclick="triggerPhotoUpload(2)">
+                                <div id="photo-2-placeholder">
+                                    <i data-lucide="camera" class="w-8 h-8 text-gray-400 mx-auto mb-2"></i>
+                                    <p class="text-sm text-gray-600">Side View</p>
+                                </div>
+                                <img id="photo-2-preview" class="photo-preview mx-auto hidden" alt="Side view">
+                            </div>
+                            <div id="photo-2-status" class="text-xs text-gray-500">Required</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div id="photo-3" class="upload-area mb-2" onclick="triggerPhotoUpload(3)">
+                                <div id="photo-3-placeholder">
+                                    <i data-lucide="camera" class="w-8 h-8 text-gray-400 mx-auto mb-2"></i>
+                                    <p class="text-sm text-gray-600">Back View</p>
+                                </div>
+                                <img id="photo-3-preview" class="photo-preview mx-auto hidden" alt="Back view">
+                            </div>
+                            <div id="photo-3-status" class="text-xs text-gray-500">Required</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div id="photo-4" class="upload-area mb-2" onclick="triggerPhotoUpload(4)">
+                                <div id="photo-4-placeholder">
+                                    <i data-lucide="camera" class="w-8 h-8 text-gray-400 mx-auto mb-2"></i>
+                                    <p class="text-sm text-gray-600">Serial Number</p>
+                                </div>
+                                <img id="photo-4-preview" class="photo-preview mx-auto hidden" alt="Serial number">
+                            </div>
+                            <div id="photo-4-status" class="text-xs text-gray-500">Required</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden file inputs -->
+                    <input type="file" id="file-input-1" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(1, this)">
+                    <input type="file" id="file-input-2" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(2, this)">
+                    <input type="file" id="file-input-3" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(3, this)">
+                    <input type="file" id="file-input-4" accept="image/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(4, this)">
+                    
+                    <div class="bg-yellow-50 p-4 border border-yellow-200">
+                        <div class="flex items-start space-x-2">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600 mt-0.5"></i>
+                            <div class="text-sm">
+                                <p class="font-semibold text-yellow-900 mb-1">Photo Guidelines:</p>
+                                <ul class="text-yellow-700 space-y-1">
+                                    <li>• Ensure good lighting and clear visibility</li>
+                                    <li>• Include serial numbers and identification tags</li>
+                                    <li>• Document any existing damage or wear</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 4: Loading Video & GPS -->
+            <div id="state-4" class="hidden page-state content-padding-bottom">
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4">
+                        <i data-lucide="video" class="w-5 h-5 mr-2 text-blue-600 inline"></i>
+                        Loading Documentation
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">Record a brief video of the loading process to complete the pickup verification</p>
+                    
+                    <div id="video-upload-area" class="upload-area mb-6" onclick="triggerVideoUpload()">
+                        <div id="video-placeholder">
+                            <i data-lucide="video" class="w-12 h-12 text-gray-400 mx-auto mb-3"></i>
+                            <p class="font-semibold text-gray-700 mb-1">Record Loading Video</p>
+                            <p class="text-sm text-gray-500">Tap to start recording (30-60 seconds)</p>
+                        </div>
+                        <video id="video-preview" class="w-full rounded-lg hidden" controls></video>
+                    </div>
+                    
+                    <input type="file" id="video-input" accept="video/*" capture="environment" style="display: none;" onchange="handleVideoUpload(this)">
+                    
+                    <!-- Upload Progress -->
+                    <div id="upload-progress" class="hidden mb-6">
+                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Uploading video...</span>
+                            <span id="upload-percent">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="upload-bar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GPS Activation -->
+                <div class="bg-white p-6 card-shadow mb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4">
+                        <i data-lucide="map-pin" class="w-5 h-5 mr-2 text-blue-600 inline"></i>
+                        GPS Tracking Activation
+                    </h3>
+                    
+                    <div class="flex items-center space-x-4 p-4 bg-green-50 border border-green-200 mb-4">
+                        <div class="gps-indicator"></div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-green-900">Location Services Ready</div>
+                            <div class="text-sm text-green-700">Current location: Pickles Belmore, Sydney NSW</div>
+                        </div>
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-gray-700">Real-time location tracking for transport security</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-gray-700">Estimated delivery time updates for customer</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="truck" class="w-4 h-4 text-blue-600"></i>
+                            <span class="text-gray-700">Route optimization and traffic alerts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 5: Completion Confirmation -->
+            <div id="state-5" class="hidden page-state">
+                <div class="text-center py-8">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="check-circle" class="w-10 h-10 text-green-600"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Pickup Complete!</h2>
+                    <p class="text-gray-600 mb-8">All verification steps completed successfully</p>
+                    
+                    <!-- Completion Summary -->
+                    <div class="bg-green-50 p-6 mb-6 text-left">
+                        <h3 class="font-bold text-green-900 mb-4 flex items-center">
+                            <i data-lucide="clipboard-check" class="w-5 h-5 mr-2"></i>
+                            Verification Summary
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                <span class="text-sm text-green-800">Security verification completed</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                <span class="text-sm text-green-800">Item photos documented (4 angles)</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                <span class="text-sm text-green-800">Loading video recorded and uploaded</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                <span class="text-sm text-green-800">GPS tracking activated</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transport Details -->
+                    <div class="bg-blue-50 p-6 mb-6 text-left">
+                        <h3 class="font-bold text-blue-900 mb-4 flex items-center">
+                            <i data-lucide="route" class="w-5 h-5 mr-2"></i>
+                            Transport Information
+                        </h3>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-blue-700">Estimated Delivery:</span>
+                                <span class="font-semibold text-blue-900">Tomorrow 2:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-700">Route Distance:</span>
+                                <span class="font-semibold text-blue-900">412 km</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-700">Tracking ID:</span>
+                                <span class="font-mono font-semibold text-blue-900">TRK-PKL-001-MT</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 mb-4">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i data-lucide="truck" class="w-5 h-5"></i>
+                            <span>Start Transport Journey</span>
+                        </div>
+                    </button>
+                    
+                    <div class="text-center text-sm text-gray-600">
+                        <p>Customer will receive live tracking updates</p>
+                        <div class="flex items-center justify-center space-x-4 mt-2">
+                            <span class="flex items-center space-x-1 text-blue-600">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                                <span>1800 LOADSHIFT</span>
+                            </span>
+                            <span class="flex items-center space-x-1 text-blue-600">
+                                <i data-lucide="headphones" class="w-4 h-4"></i>
+                                <span>24/7 Support</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <div id="floating-cta-3" class="floating-cta hidden">
+            <button id="continue-video-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                <div class="flex items-center justify-center space-x-2">
+                    <i data-lucide="video" class="w-5 h-5"></i>
+                    <span>Continue to Video Recording</span>
+                </div>
+            </button>
+        </div>
+
+        <div id="floating-cta-4" class="floating-cta hidden">
+            <button id="complete-pickup-btn" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                <div class="flex items-center justify-center space-x-2">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    <span>Complete Pickup Process</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        let currentState = 1;
+        let photoCount = 0;
+        let hasVideo = false;
+        
+        
+        // State Management
+        function switchToState(state) {
+            for (let i = 1; i <= 5; i++) {
+                const stateEl = document.getElementById(`state-${i}`);
+                if (stateEl) {
+                    stateEl.classList.add('hidden');
+                }
+            }
+            
+            document.querySelectorAll('.floating-cta').forEach(el => el.classList.add('hidden'));
+            
+            const targetState = document.getElementById(`state-${state}`);
+            if (targetState) {
+                targetState.classList.remove('hidden');
+                targetState.classList.add('fade-in');
+            }
+            
+            const title = document.getElementById('page-title');
+            const subtitle = document.getElementById('page-subtitle');
+            
+            switch(state) {
+                case 1:
+                    title.textContent = 'Pickup Authentication';
+                    subtitle.textContent = 'Secure verification process for item collection';
+                    break;
+                case 2:
+                    title.textContent = 'Security Verification';
+                    subtitle.textContent = 'Verifying driver credentials and authorization';
+                    break;
+                case 3:
+                    title.textContent = 'Item Documentation';
+                    subtitle.textContent = 'Take photos to document item condition';
+                    document.getElementById('floating-cta-3').classList.remove('hidden');
+                    break;
+                case 4:
+                    title.textContent = 'Loading Documentation';
+                    subtitle.textContent = 'Record loading process and activate GPS tracking';
+                    document.getElementById('floating-cta-4').classList.remove('hidden');
+                    break;
+                case 5:
+                    title.textContent = 'Pickup Complete';
+                    subtitle.textContent = 'All verification steps completed successfully';
+                    break;
+            }
+            
+            currentState = state;
+        }
+        
+        // Security Verification Animation
+        function startSecurityVerification() {
+            const steps = [
+                { id: 'verify-step-1', icon: 'verify-icon-1', duration: 2000 },
+                { id: 'verify-step-2', icon: 'verify-icon-2', duration: 1500 },
+                { id: 'verify-step-3', icon: 'verify-icon-3', duration: 1000 }
+            ];
+            
+            let currentStep = 0;
+            
+            function processStep() {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    const stepEl = document.getElementById(step.id);
+                    const iconEl = document.getElementById(step.icon);
+                    
+                    if (currentStep > 0) {
+                        const prevStep = steps[currentStep - 1];
+                        const prevStepEl = document.getElementById(prevStep.id);
+                        const prevIconEl = document.getElementById(prevStep.icon);
+                        
+                        prevStepEl.classList.remove('active');
+                        prevStepEl.classList.add('completed');
+                        prevIconEl.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-white"></i>';
+                        prevIconEl.className = 'w-6 h-6 bg-green-600 rounded-full flex items-center justify-center';
+                        lucide.createIcons();
+                    }
+                    
+                    stepEl.classList.add('active');
+                    iconEl.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 text-white animate-spin"></i>';
+                    iconEl.className = 'w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center';
+                    lucide.createIcons();
+                    
+                    setTimeout(() => {
+                        currentStep++;
+                        if (currentStep < steps.length) {
+                            processStep();
+                        } else {
+                            const lastStep = steps[steps.length - 1];
+                            const lastStepEl = document.getElementById(lastStep.id);
+                            const lastIconEl = document.getElementById(lastStep.icon);
+                            
+                            lastStepEl.classList.remove('active');
+                            lastStepEl.classList.add('completed');
+                            lastIconEl.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-white"></i>';
+                            lastIconEl.className = 'w-6 h-6 bg-green-600 rounded-full flex items-center justify-center';
+                            lucide.createIcons();
+                            
+                            setTimeout(() => {
+                                switchToState(3);
+                            }, 1000);
+                        }
+                    }, step.duration);
+                }
+            }
+            
+            processStep();
+        }
+        
+        // Photo Upload Functions
+        function triggerPhotoUpload(photoNumber) {
+            document.getElementById(`file-input-${photoNumber}`).click();
+        }
+        
+        function handlePhotoUpload(photoNumber, input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const placeholder = document.getElementById(`photo-${photoNumber}-placeholder`);
+                    const preview = document.getElementById(`photo-${photoNumber}-preview`);
+                    const status = document.getElementById(`photo-${photoNumber}-status`);
+                    
+                    placeholder.classList.add('hidden');
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    status.textContent = 'Completed';
+                    status.className = 'text-xs text-green-600 font-semibold';
+                    
+                    photoCount++;
+                    updatePhotoProgress();
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function updatePhotoProgress() {
+            if (photoCount >= 4) {
+                document.getElementById('floating-cta-3').classList.remove('hidden');
+            }
+        }
+        
+        // Video Upload Functions
+        function triggerVideoUpload() {
+            document.getElementById('video-input').click();
+        }
+        
+        function handleVideoUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const placeholder = document.getElementById('video-placeholder');
+                const preview = document.getElementById('video-preview');
+                const progressDiv = document.getElementById('upload-progress');
+                const progressBar = document.getElementById('upload-bar');
+                const progressPercent = document.getElementById('upload-percent');
+                
+                placeholder.classList.add('hidden');
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('hidden');
+                progressDiv.classList.remove('hidden');
+                
+                let progress = 0;
+                const uploadInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(uploadInterval);
+                        hasVideo = true;
+                        setTimeout(() => {
+                            progressDiv.classList.add('hidden');
+                        }, 1000);
+                    }
+                    
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = Math.floor(progress) + '%';
+                }, 200);
+            }
+        }
+        
+        // Event Listeners
+        document.getElementById('security-check-btn').addEventListener('click', function() {
+            switchToState(2);
+            setTimeout(startSecurityVerification, 500);
+        });
+        
+        document.getElementById('continue-video-btn').addEventListener('click', function() {
+            if (photoCount >= 4) {
+                switchToState(4);
+            } else {
+                alert('Please complete all photo documentation first.');
+            }
+        });
+        
+        document.getElementById('complete-pickup-btn').addEventListener('click', function() {
+            if (!hasVideo) {
+                alert('Please record the loading video first.');
+                return;
+            }
+            switchToState(5);
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            switchToState(1);
+        });
+    </script>
+</body>
+</html>
