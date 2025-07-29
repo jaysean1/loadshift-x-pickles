@@ -5,7 +5,7 @@
 基于《Pickles_ZT2_PRD_中文版.md》产品需求文档，将零接触运输平台的完整用户流程分解为独立的HTML页面，用于产品演示和概念验证。
 
 ### 目标
-- 创建12个独立HTML页面，完整展示ZT2平台核心功能
+- 创建独立HTML页面，完整展示ZT2平台核心功能
 - 保持设计风格一致性，体现Pickles x Loadshift联合品牌
 - 通过模拟数据和交互，展示完整的用户体验流程
 - 支持移动端和桌面端响应式展示
@@ -20,7 +20,7 @@
 ## design
 - 作为 UI 设计师，设计贴近真实规范的界面，使用现代化的 UI 元素，使其具有良好的视觉体验.
 - 使用 HTML + Tailwind CSS (或 Bootstrap) 生成所有原型界面，并使用 FontAwesome (或其他开源 UI 组件) 让界更加精美、接近真实的 App 设计
-- 通话界面尺寸应模拟 iPhone 15 Pro，并让界面圆角化，使其更像真实的手机界面
+- 只有通话界面尺寸应模拟 iPhone 15 Pro，并让界面圆角化，使其更像真实的手机界面
 - 使用lucide icon 组件库为产品添加icon
 
 
@@ -46,18 +46,12 @@ pickles-zt2-demo/
 │   ├── images/               # 图片资源
 │   └── icons/                # 图标资源
 └── pages/                    # 独立页面目录
-    ├── client_quote.html  # 客户获取报价页面
-    ├── phonecall_confirm.html  # ai 与客户的通话界面 
-    ├── order_confirmation.html  # 短信 +  跳转到 订单确认页面
-    ├── pickup_auth.html  # 司机取货认证页面
-    ├── god_mode.html  # 运营监控仪表板 
-    ├── delivery_complete.html  # 配送完成确认
-    ├── tracking.html  # 实时跟踪页面
-    ├── mobile_app.html 
-    ├── sms_notifications.html
-    ├── payment_escrow.html
-    ├── driver_profile.html
-    └── error_handling.html
+    ├── client_quote.html  # 拍卖客户 - 购买前阶段 - 自动报价
+    ├── phonecall_confirm.html  # 认证承运商/司机 - 用户完成bid后 - 收到ai的询单电话 
+    ├── order_confirmation.html  # 拍卖客户 - 购买后阶段 - 收到报价确认
+    ├── pickup_auth.html  # 认证承运商/司机 - 用户完成订单确认后 - 取货认证
+    ├── god_mode.html  # loadshift 物流运营团队 - 司机完成取货后 - god mode 
+    ├── delivery_complete.html  # 拍卖客户 - 收到货物 - 当面完成订单完成确认
 
 
 ---
