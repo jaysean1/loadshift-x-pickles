@@ -144,9 +144,17 @@
         }
         
         .desktop-demo .demo-iframe {
-            height: 900px;
-            transform: scale(0.8);
-            transform-origin: top center;
+            height: 1000px;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 auto;
+        }
+        
+        .desktop-layout .desktop-demo .demo-iframe {
+            width: 65vw !important;
+            height: 80vh !important;
+            min-height: 800px;
+            max-width: none !important;
         }
         
         #demo-container {
@@ -185,6 +193,41 @@
             min-height: 600px;
         }
         
+        .layout-alternating.desktop-layout {
+            gap: 1rem;
+            max-width: none !important;
+            width: 95vw !important;
+            margin: 0 auto;
+        }
+        
+        .layout-alternating.desktop-layout #demo-container {
+            flex: 3;
+            width: 70vw !important;
+        }
+        
+        .layout-alternating.desktop-layout #info-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .desktop-layout-container {
+            max-width: none !important;
+            width: 100vw !important;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+            padding: 0 2rem;
+        }
+        
+        .desktop-demo.w-full {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        body.desktop-mode main {
+            max-width: none !important;
+            width: 100% !important;
+        }
+        
         @media (max-width: 1024px) {
             .layout-alternating {
                 flex-direction: column;
@@ -192,7 +235,8 @@
             }
             
             .desktop-demo .demo-iframe {
-                transform: scale(0.6);
+                height: 800px;
+                max-width: 1200px;
             }
             
             .iphone-shell {
@@ -208,7 +252,8 @@
             }
             
             .desktop-demo .demo-iframe {
-                transform: scale(0.5);
+                height: 700px;
+                max-width: 1000px;
             }
             
             .iphone-shell {
@@ -310,10 +355,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="desktop-demo" class="desktop-demo hidden">
-                        <div class="card-shadow rounded-lg overflow-hidden">
-                            <iframe id="desktop-iframe" class="demo-iframe" src=""></iframe>
-                        </div>
+                    <div id="desktop-demo" class="desktop-demo hidden w-full">
+                        <iframe id="desktop-iframe" class="demo-iframe card-shadow rounded-lg" src=""></iframe>
                     </div>
                 </div>
                 
@@ -592,14 +635,36 @@
             
             loadDemoPage() {
                 const currentPage = this.demoPages[this.currentStep];
+                const layoutContainer = document.querySelector('.layout-alternating');
+                const mainContainer = document.querySelector('main');
+                const demoSection = document.getElementById('demo-section');
                 
                 if (currentPage.type === 'mobile') {
                     this.mobileDemo.classList.remove('hidden');
                     this.desktopDemo.classList.add('hidden');
+                    layoutContainer.classList.remove('desktop-layout');
+                    
+                    // 恢复主容器限制
+                    mainContainer.classList.add('max-w-7xl');
+                    demoSection.classList.remove('desktop-layout-container');
+                    document.body.classList.remove('desktop-mode');
+                    
                     this.demoIframe.src = currentPage.url;
                 } else {
                     this.mobileDemo.classList.add('hidden');
                     this.desktopDemo.classList.remove('hidden');
+                    layoutContainer.classList.add('desktop-layout');
+                    
+                    // 移除主容器宽度限制，使用全宽布局
+                    mainContainer.classList.remove('max-w-7xl');
+                    demoSection.classList.add('desktop-layout-container');
+                    document.body.classList.add('desktop-mode');
+                    
+                    // 强制设置样式
+                    layoutContainer.style.width = '95vw';
+                    layoutContainer.style.maxWidth = 'none';
+                    layoutContainer.style.margin = '0 auto';
+                    
                     this.desktopIframe.src = currentPage.url;
                 }
             }
