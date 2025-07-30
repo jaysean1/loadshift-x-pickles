@@ -17,7 +17,9 @@
             --text-accent: #06b6d4;
             --border-subtle: #333333;
             --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            --gradient-orange: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
             --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --shadow-orange: 0 0 20px rgba(249, 115, 22, 0.3);
         }
         
         .gradient-bg {
@@ -369,8 +371,17 @@
             }
         }
         
+        @keyframes pulse-orange {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 35px rgba(249, 115, 22, 0.5);
+            }
+        }
+        
         .tech-pulse {
-            animation: pulse-glow 3s ease-in-out infinite;
+            animation: pulse-orange 3s ease-in-out infinite;
         }
         
         /* Hero Features Custom Styles */
@@ -404,10 +415,10 @@
         }
         
         .dark-nav-badge {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: var(--gradient-orange);
             color: var(--text-primary);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
         }
         
         /* Feature-specific gradients */
@@ -526,11 +537,11 @@
                                                     fill="url(#paint0_linear_0_1)"
                                                 />
                                             </g>
-                                            <path class="text-indigo-600" d="M3 72H209" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                                            <path class="text-orange-500" d="M3 72H209" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
                                             <defs>
                                                 <linearGradient id="paint0_linear_0_1" x1="106.385" y1="1.34375" x2="106" y2="72" gradientUnits="userSpaceOnUse">
                                                     <stop stopColor="white" stopOpacity="0" />
-                                                    <stop class="text-indigo-600" offset="1" stopColor="currentColor" />
+                                                    <stop class="text-blue-600" offset="1" stopColor="currentColor" />
                                                 </linearGradient>
                                                 <clipPath id="clip0_0_1">
                                                     <rect width="129" height="72" fill="white" transform="translate(41)" />
@@ -574,7 +585,7 @@
                                             />
                                             <defs>
                                                 <linearGradient id="paint0_linear_0_106" x1="3" y1="60" x2="3" y2="123" gradientUnits="userSpaceOnUse">
-                                                    <stop class="text-indigo-100" stopColor="currentColor" />
+                                                    <stop class="text-blue-500" stopColor="currentColor" />
                                                     <stop class="text-transparent" offset="1" stopColor="currentColor" stopOpacity="0.103775" />
                                                 </linearGradient>
                                                 <clipPath id="clip0_0_106">
@@ -604,25 +615,25 @@
                                     </div>
                                     <div class="relative mt-6 before:bg-gray-200 before:absolute before:inset-0 before:mx-auto before:w-px sm:-my-6 sm:-mr-6">
                                         <div class="relative flex h-full flex-col justify-center space-y-6 py-6">
-                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm">AI Agent</span>
-                                                <div class="ring-background size-7 ring-4">
+                                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
+                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">AI Agent</span>
+                    <div class="ring-background size-7 ring-4">
                                                     <div class="size-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
                                                         <i data-lucide="bot" class="w-4 h-4 text-white"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="relative ml-[calc(50%-1rem)] flex items-center gap-2">
-                                                <div class="ring-background size-8 ring-4">
-                                                    <div class="size-full rounded-full bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center">
-                                                        <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
-                                                    </div>
-                                                </div>
-                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm">Security Auth</span>
-                                            </div>
-                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm">Real-time Tracking</span>
-                                                <div class="ring-background size-7 ring-4">
+                                                            <div class="relative ml-[calc(50%-1rem)] flex items-center gap-2">
+                    <div class="ring-background size-8 ring-4">
+                        <div class="size-full rounded-full bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Security Auth</span>
+                </div>
+                                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
+                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Real-time Tracking</span>
+                    <div class="ring-background size-7 ring-4">
                                                     <div class="size-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center">
                                                         <i data-lucide="map-pin" class="w-4 h-4 text-white"></i>
                                                     </div>
@@ -638,7 +649,7 @@
             </section>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button id="start-demo" class="tech-pulse px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105" style="background: var(--gradient-primary); color: var(--text-primary); box-shadow: var(--shadow-glow);">
+                <button id="start-demo" class="tech-pulse px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105" style="background: var(--gradient-orange); color: var(--text-primary); box-shadow: var(--shadow-orange);">
                     Start Demo Experience
                 </button>
                 <div class="text-sm" style="color: var(--text-secondary);">
@@ -732,7 +743,7 @@
                     </div>
                 </div>
                 
-                <button id="next-btn" class="flex items-center px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105" style="background: var(--gradient-primary); color: var(--text-primary); box-shadow: var(--shadow-glow);">
+                <button id="next-btn" class="flex items-center px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105" style="background: var(--gradient-orange); color: var(--text-primary); box-shadow: var(--shadow-orange);">
                     Next
                     <i data-lucide="chevron-right" class="w-4 h-4 ml-2"></i>
                 </button>

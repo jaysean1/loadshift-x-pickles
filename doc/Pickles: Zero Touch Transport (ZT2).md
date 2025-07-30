@@ -27,6 +27,11 @@ The current Pickles transport request form is pretty basic (see below)
 
 *目前 Pickles 的运输请求表单相当基础（见下文）* 
 
+## files
+`pickles.au/Pickles_ZT2_PRD_中文版.md` 完整的prd文件，按照产品文档，进行设计
+`pickles.au/Pickles ZT2 Proposal - Zero Touch Transport Platform.md` 对外的proposal文档
+`pickles.au/Pickles: Zero Touch Transport (ZT2).md` 业务需求文档
+`doc/Pickles_ZT2_HTML开发计划.md` 开发计划文档
 
 
 ## Flow 1: Outbound Customer - Pre-purchase Estimate

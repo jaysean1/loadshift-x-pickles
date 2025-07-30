@@ -15,6 +15,13 @@ Pickles 零接触运输 (ZT2) 平台旨在通过创建无缝的、AI驱动的运
   - 利用AI和"酷技术"驱动效率
   - 在 Pickles 和 Loadshift 之间创建共同品牌体验
 
+
+## files
+`pickles.au/Pickles_ZT2_PRD_中文版.md` 完整的prd文件，按照产品文档，进行设计
+`pickles.au/Pickles ZT2 Proposal - Zero Touch Transport Platform.md` 对外的proposal文档
+`pickles.au/Pickles: Zero Touch Transport (ZT2).md` 业务需求文档
+`doc/Pickles_ZT2_HTML开发计划.md` 开发计划文档
+
 ## 用户类型与角色画像
 
 ### 1. 拍卖客户（主要外部用户）
