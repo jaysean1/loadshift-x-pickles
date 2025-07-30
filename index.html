@@ -421,6 +421,22 @@
             box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
         }
         
+        /* 导航回到首页按钮样式 */
+        .nav-home-clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .nav-home-clickable:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+        }
+        
+        .nav-home-clickable:active {
+            transform: translateY(0);
+        }
+        
         /* Feature-specific gradients */
         .customizable-gradient {
             background: var(--gradient-primary);
@@ -478,9 +494,9 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
                     <div class="text-2xl dark-nav-brand">Pickles × Loadshift</div>
-                    <div class="hidden md:block dark-nav-badge px-3 py-1 rounded-full text-sm">
+                    <button id="nav-home-btn" class="hidden md:block dark-nav-badge px-3 py-1 rounded-full text-sm nav-home-clickable">
                         Zero Touch Transport (ZT2) Platform
-                    </div>
+                    </button>
                 </div>
                 
             </div>
@@ -883,6 +899,7 @@
                 this.heroSection = document.getElementById('hero-section');
                 this.demoSection = document.getElementById('demo-section');
                 this.startDemoBtn = document.getElementById('start-demo');
+                this.navHomeBtn = document.getElementById('nav-home-btn');
                 this.prevBtn = document.getElementById('prev-btn');
                 this.nextBtn = document.getElementById('next-btn');
                 this.progressBar = document.getElementById('progress-bar');
@@ -899,6 +916,7 @@
             
             bindEvents() {
                 this.startDemoBtn.addEventListener('click', () => this.startDemo());
+                this.navHomeBtn.addEventListener('click', () => this.returnToHome());
                 this.prevBtn.addEventListener('click', () => this.previousStep());
                 this.nextBtn.addEventListener('click', () => this.nextStep());
                 
@@ -1010,6 +1028,38 @@
             handleIframeLoad() {
                 // Add any iframe-specific handling here
                 console.log(`Loaded demo page: ${this.demoPages[this.currentStep].title}`);
+            }
+            
+            // 回到首页方法 - Return to home page method
+            returnToHome() {
+                // 隐藏demo section，显示hero section - Hide demo section, show hero section
+                this.demoSection.classList.add('hidden');
+                this.heroSection.classList.remove('hidden');
+                this.heroSection.classList.add('fade-in');
+                
+                // 重置当前步骤 - Reset current step
+                this.currentStep = 0;
+                
+                // 清理iframe内容 - Clear iframe content
+                this.demoIframe.src = '';
+                this.desktopIframe.src = '';
+                
+                // 重置布局 - Reset layout
+                const layoutContainer = document.querySelector('.layout-alternating');
+                const mainContainer = document.querySelector('main');
+                const demoSection = document.getElementById('demo-section');
+                
+                layoutContainer.classList.remove('desktop-layout');
+                mainContainer.classList.add('max-w-7xl');
+                demoSection.classList.remove('desktop-layout-container');
+                document.body.classList.remove('desktop-mode');
+                
+                // 清除内联样式 - Clear inline styles
+                layoutContainer.style.cssText = '';
+                mainContainer.style.cssText = '';
+                demoSection.style.cssText = '';
+                
+                console.log('Returned to home page');
             }
         }
         
