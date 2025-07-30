@@ -868,6 +868,14 @@
                     demoSection.classList.remove('desktop-layout-container');
                     document.body.classList.remove('desktop-mode');
                     
+                    // 完全清除desktop模式下设置的内联样式
+                    layoutContainer.style.cssText = '';
+                    
+                    // 确保主容器和demo section恢复移动端样式
+                    mainContainer.style.maxWidth = '';
+                    mainContainer.style.width = '';
+                    demoSection.style.cssText = '';
+                    
                     this.demoIframe.src = currentPage.url;
                 } else {
                     this.mobileDemo.classList.add('hidden');
