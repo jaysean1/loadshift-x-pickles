@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Pickles ZT2 Platform - Zero Touch Transport Demo
 
 > 🚚 革命性的AI驱动物流解决方案演示平台
@@ -225,3 +226,6 @@ pickles.au/
   <p><strong>🚚 零接触运输 | 🤖 AI驱动 | 🔒 安全可靠</strong></p>
   <p><em>© 2025 Pickles × Loadshift. Zero Touch Transport (ZT2) Platform Demo.</em></p>
 </div> 
+=======
+# loadshift-x-pickles
+>>>>>>> fbd183e1b1929f05bc997699fce15a816bd40be5
