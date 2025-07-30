@@ -216,7 +216,6 @@
             20% { transform: scaleY(1); opacity: 1; }
         }
         
-        
         .end-call-controls {
             position: fixed;
             bottom: 120px; /* 距离iPhone底部的距离 */
@@ -306,6 +305,12 @@
         
         <!-- 通话中界面 -->
         <div id="in-call" class="in-call-interface hidden">
+            <!-- 隐藏的录音文件 -->
+            <audio id="recording-audio" preload="auto">
+                <source src="../assets/download.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+            
             <!-- 隐藏的大头像，用于保持与来电界面相同的布局宽度 -->
             <div class="caller-avatar" style="visibility: hidden; height: 0; pointer-events: none;">
                 <i data-lucide="bot" class="w-20 h-20 text-white"></i>
@@ -348,6 +353,7 @@
         
         let callTimer = 0;
         let timerInterval;
+        let recordingAudio = null;
         
         // 通话计时器
         function startCallTimer() {
@@ -366,6 +372,22 @@
             }
         }
         
+        // 自动播放录音
+        function startRecordingPlayback() {
+            recordingAudio = document.getElementById('recording-audio');
+            
+            // 录音播放结束事件（可用于后续操作）
+            recordingAudio.addEventListener('ended', function() {
+                console.log('录音播放完成');
+                // 这里可以添加录音播放完成后的逻辑
+            });
+            
+            // 自动开始播放录音
+            recordingAudio.play().catch(function(error) {
+                console.log('录音播放失败:', error);
+            });
+        }
+        
         // 接听电话
         document.getElementById('accept-btn').addEventListener('click', function() {
             // 隐藏来电界面
@@ -379,14 +401,8 @@
             // 启动通话计时器
             startCallTimer();
             
-            // 这里是录音文件集成的入口点
-            // 用户可以在这里添加录音文件播放逻辑
-            console.log('录音集成入口: 这里可以添加录音文件播放功能');
-            
-            // 模拟录音文件播放完成后的操作
-            // setTimeout(() => {
-            //     // 录音播放完成后的逻辑
-            // }, recordingDuration);
+            // 自动开始录音播放（模拟电话通话）
+            startRecordingPlayback();
         });
         
         // 拒绝电话
@@ -401,6 +417,12 @@
         document.getElementById('end-call-btn').addEventListener('click', function() {
             // 停止计时器
             stopCallTimer();
+            
+            // 停止录音播放
+            if (recordingAudio) {
+                recordingAudio.pause();
+                recordingAudio.currentTime = 0;
+            }
             
             // 停留在当前页面，不进行跳转
             console.log('Call ended - staying on current page');

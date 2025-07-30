@@ -4,13 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the Pickles Zero Touch Transport (ZT2) platform demo - a static HTML prototype for an AI-driven logistics solution that integrates Pickles Auctions with Loadshift's crowdsourced transport network. The demo showcases a mobile-first client quote interface with multi-state user flow and AI analysis simulation.
+This is the Pickles Zero Touch Transport (ZT2) platform demo - a comprehensive static HTML prototype for an AI-driven logistics solution that integrates Pickles Auctions with Loadshift's crowdsourced transport network. The demo features a multi-page orchestrated experience with both mobile and desktop layouts.
 
 ## Commands
 
 **This is a static HTML project with no build system.** To view the project:
-- Open `pickles-zt2-demo/pages/client_quote.html` directly in a web browser
+- Open `index.html` directly in a web browser (main entry point)
 - Use a local web server for development (e.g., `python -m http.server` or VS Code Live Server extension)
+- Individual demo pages can be accessed at `pickles-zt2-demo/pages/*.html`
 
 No build, lint, or test commands are available.
 
@@ -20,49 +21,82 @@ No build, lint, or test commands are available.
 - **Frontend**: Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Tailwind CSS (loaded via CDN)
 - **Icons**: Lucide icons (loaded via CDN)
-- **Layout**: Mobile-first responsive design with a maximum width of 430px
+- **Layout**: Responsive design with mobile-first approach (430px max-width) and desktop layouts
 
 ### Key Files Structure
 ```
-pickles-zt2-demo/
-├── pages/
-│   └── client_quote.html - Main demo page with complete UI flow
-├── css/ - (empty, styles are inline)
-├── js/ - (empty, JavaScript is inline) 
-└── assets/
-    ├── icons/
-    └── images/
+├── index.html - Main demo orchestration controller
+└── pickles-zt2-demo/
+    ├── pages/
+    │   ├── client_quote.html - AI quote generation (mobile)
+    │   ├── phonecall_confirm.html - AI agent confirmation (mobile)
+    │   ├── order_confirmation.html - Automated processing (mobile)
+    │   ├── pickup_auth.html - Digital authorization (mobile)
+    │   ├── god_mode.html - Operations dashboard (desktop)
+    │   └── delivery_complete.html - Completion tracking (mobile)
+    └── assets/
+        ├── icons/
+        └── images/
 ```
 
-### Application Flow States
-The demo implements a 4-state user journey:
-1. **State 1**: Delivery information input form
-2. **State 2**: AI analysis simulation with progress bar and animated steps
-3. **State 3**: Analysis results with pricing estimates and carrier mapping
-4. **State 4**: Completion status with SLA promises
+### Demo Orchestration Architecture
 
-### Key JavaScript Functions
-- `switchToState(state)` - Core state management function
-- `startAnalysis()` - Orchestrates AI analysis animation with realistic timing
-- `setupNextStepButton()` / `setupQuoteButton()` - Event handlers for user flow
+The `index.html` serves as the main controller using the `ZT2DemoController` class that manages:
+
+**6-Step Demo Flow:**
+1. AI-Powered Quote Generation (mobile)
+2. AI Agent Confirmation (mobile) 
+3. Automated Order Processing (mobile)
+4. Digital Pickup Authorization (mobile)
+5. Operations Command Center - "God Mode" (desktop)
+6. Delivery Completion (mobile)
+
+**Key Controller Methods:**
+- `ZT2DemoController.navigateToStep(stepIndex)` - Core navigation
+- `loadDemoPage()` - Handles mobile/desktop layout switching
+- `updateUI()` - Synchronizes progress bar and info panel
+
+### Layout System
+
+**Mobile Layout (Steps 1-4, 6):**
+- iPhone shell design with dynamic island and physical buttons
+- 430px maximum width container
+- Embedded iframe with mobile-optimized content
+
+**Desktop Layout (Step 5 - God Mode):**
+- Full-width responsive layout (95vw)
+- Side-by-side iframe and information panel
+- Special layout classes: `desktop-layout`, `desktop-mode`, `desktop-layout-container`
+
+**Critical Layout Switching Logic:**
+When switching from desktop back to mobile, the system must clear all inline styles set during desktop mode to prevent layout persistence issues.
+
+### Individual Demo Pages
+
+Each page in `pickles-zt2-demo/pages/` is a self-contained HTML file with:
+- Multi-state user interface (typically 4 states per page)
+- State management via `switchToState(state)` functions
+- AI simulation timing and animations
+- Inline styles and JavaScript for portability
 
 ### Styling Conventions
-- Uses Tailwind CSS utility classes throughout
-- Custom CSS animations for AI pulse effects, progress bars, and fade transitions
-- Gradient backgrounds and card shadows for visual hierarchy
-- Mobile-optimized containers with responsive breakpoints
+- Tailwind CSS utility classes throughout
+- Custom CSS animations (ai-pulse, progress bars, fade transitions)
+- Gradient backgrounds: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`
+- iPhone shell styling with realistic hardware elements
+- Mobile-first responsive breakpoints
 
 ### Code Style
 - 4-space indentation for HTML, CSS, and JavaScript
-- `camelCase` for JavaScript functions
-- `kebab-case` for HTML element IDs  
-- English/Chinese bilingual comments and content
-- Inline styles and scripts (not separated into files)
+- `camelCase` for JavaScript functions and properties
+- `kebab-case` for HTML element IDs
+- English/Chinese bilingual content and comments
+- All styles and scripts inline for self-contained demos
 
 ## Development Notes
 
-- The project simulates AI analysis with realistic timing (12+ seconds total)
-- Form validation uses basic JavaScript `alert()` for user feedback
-- Icons are initialized with `lucide.createIcons()` on page load
-- State transitions use CSS classes for smooth animations
-- The demo is fully self-contained in a single HTML file
+- Demo orchestration uses iframe embedding for seamless page transitions
+- Layout switching between mobile and desktop requires careful style management
+- Each demo page simulates realistic AI processing timing (8-15 seconds)
+- Icons require `lucide.createIcons()` initialization after DOM changes
+- The system is designed for demonstration purposes with simulated backend responses
