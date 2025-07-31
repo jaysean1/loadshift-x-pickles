@@ -1,7 +1,9 @@
 Proposal: Build the “DataOps Engine”
 A secure, multilingual, human-in-the-loop platform to win the clients now defecting from Scale.ai
 1. Why now?
-Scale.ai’s moat is breaking. Google—the company’s largest account—plans to terminate its $200 M annual contract after Meta bought a 49% stake in Scale. Microsoft, xAI and OpenAI are also reassessing their dependence on the firm. https://www.reuters.com/business/google-scale-ais-largest-customer-plans-split-after-meta-deal-sources-say-2025-06-13/ 
+Scale.ai’s moat is breaking. Google—the company’s largest account—plans to terminate its $200 M annual contract after Meta bought a 49% stake in Scale. Microsoft, xAI and OpenAI are also reassessing their dependence on the firm. 
+
+https://www.reuters.com/business/google-scale-ais-largest-customer-plans-split-after-meta-deal-sources-say-2025-06-13/ 
 
 
 Clients need an immediate, enterprise-grade alternative that protects proprietary data, offers elastic capacity and lowers cost without sacrificing quality.
