@@ -755,7 +755,7 @@
                 
                 <div class="flex-1 mx-8">
                     <div class="bg-gray-200 rounded-full h-2">
-                        <div id="progress-bar" class="progress-bar h-full rounded-full" style="width: 16.67%"></div>
+                        <div id="progress-bar" class="progress-bar h-full rounded-full" style="width: 14.29%"></div>
                     </div>
                 </div>
                 
@@ -809,8 +809,21 @@
         class ZT2DemoController {
             constructor() {
                 this.currentStep = 0;
-                this.totalSteps = 6;
+                this.totalSteps = 7;
                 this.demoPages = [
+                    {
+                        url: 'pickles-zt2-demo/pages/bid_page.html',
+                        type: 'desktop',
+                        title: 'Pickles Auction Platform Integration',
+                        description: 'Seamless integration with Pickles auction platform featuring automatic context parameter passing, intelligent item specification parsing, and direct transport quote initiation.',
+                        features: [
+                            'Deep Pickles platform integration',
+                            'Automatic context parameter transfer', 
+                            'Intelligent item specification parsing',
+                            'One-click transport quote activation'
+                        ],
+                        businessImpact: 'Eliminates manual data entry between auction browsing and transport booking, improving conversion rates by 60% through seamless user experience.'
+                    },
                     {
                         url: 'pickles-zt2-demo/pages/client_quote.html',
                         type: 'mobile',
