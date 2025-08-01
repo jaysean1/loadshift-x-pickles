@@ -10,7 +10,7 @@
         /* iPhone 15 Pro样式的通话界面 */
         .iphone-container {
             width: 430px;
-            height: 932px;
+            height: 800px;
             margin: 0 auto;
             background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
             border-radius: 50px;
@@ -22,7 +22,7 @@
         
         /* 状态栏样式 */
         .status-bar {
-            height: 54px;
+            height: 44px;
             background: transparent;
             display: flex;
             justify-content: space-between;
@@ -47,13 +47,13 @@
         
         /* 来电界面样式 */
         .call-interface {
-            height: calc(100% - 54px);
+            height: calc(100% - 44px);
             background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px 40px 140px; /* 增加底部padding为浮层按钮留空间 */
+            padding: 40px 30px 100px; /* 增加底部padding为浮层按钮留空间 */
             color: white;
             text-align: center;
         }
@@ -67,14 +67,14 @@
         }
         
         .caller-avatar {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             animation: avatar-pulse 2s infinite;
         }
         
@@ -84,33 +84,33 @@
         }
         
         .caller-name {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 300;
             margin-bottom: 8px;
             color: white;
         }
         
         .caller-subtitle {
-            font-size: 20px;
+            font-size: 18px;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 10px;
         }
         
         .call-status {
-            font-size: 18px;
+            font-size: 16px;
             color: rgba(255, 255, 255, 0.8);
         }
         
         /* 通话按钮样式 - 改为浮层 */
         .call-controls {
             position: fixed;
-            bottom: 20px; /* 距离iPhone底部的距离 */
+            bottom: 15px; /* 距离iPhone底部的距离 */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            width: 300px;
+            width: 280px;
             z-index: 20;
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
@@ -119,8 +119,8 @@
         }
         
         .call-button {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: none;
             display: flex;
@@ -144,13 +144,13 @@
         
         /* 通话中界面样式 */
         .in-call-interface {
-            height: calc(100% - 54px);
+            height: calc(100% - 44px);
             background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 60px 40px 140px; /* 增加底部padding为浮层按钮留空间 */
+            padding: 40px 30px 100px; /* 增加底部padding为浮层按钮留空间 */
             color: white;
             text-align: center;
         }
@@ -189,9 +189,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 80px;
+            height: 60px;
             flex: 1;
-            margin: 40px 0;
+            margin: 30px 0;
         }
         
         .wave-bar {
@@ -218,7 +218,7 @@
         
         .end-call-controls {
             position: fixed;
-            bottom: 120px; /* 距离iPhone底部的距离 */
+            bottom: 80px; /* 距离iPhone底部的距离 */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -234,8 +234,8 @@
         
         .end-call-btn {
             background: #ff3b30;
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: none;
             display: flex;
