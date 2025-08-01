@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Location: pickles-zt2-demo/pages/sms.html -->
+    <!-- SMS notification interface - Customer receives transport update via text message -->
+    <!-- Focused interface for simulating SMS reception with transport tracking link -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Update SMS - Pickles × Loadshift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* SMS interface styles */
+        .sms-screen {
+            background: #000;
+            border-radius: 25px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 400px;
+            min-height: 800px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        .sms-header {
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+        
+        .sms-bubble {
+            background: #007AFF;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin: 10px 0;
+            max-width: 85%;
+            margin-left: auto;
+            margin-right: 10px;
+            position: relative;
+        }
+        
+        .sms-bubble::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 10px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #007AFF;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        
+        .sms-link {
+            color: #4FC3F7;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background: #1a1a1a; margin: 0; padding: 0;">
+    <div class="mobile-container">
+        <!-- SMS notification interface -->
+        <div class="flex items-center justify-center min-h-screen" style="background: #1a1a1a;">
+            <!-- SMS interface simulation -->
+            <div class="sms-screen fade-in">
+                <div class="sms-header">
+                    <div class="text-sm">Loadshift Transport Update</div>
+                    <div class="text-xs opacity-60">+61 1800 LOADSHIFT</div>
+                </div>
+                
+                <div class="sms-bubble">
+                    <div class="font-medium mb-2">🚛 Transport Update</div>
+                    <div class="text-sm mb-3">
+                        Hello John Smith!<br><br>
+                        Your generator has been picked up and is now in transit<br>
+                        📦 JDC Thomson Generator<br>
+                        🚚 Jason (⭐⭐⭐⭐⭐)<br>
+                        📍 Current location: Sydney → Temora<br>
+                        ⏰ ETA: Today 3:30 PM
+                    </div>
+                    <div class="text-sm">
+                        Track your cargo in real-time:<br>
+                        <span class="sms-link" onclick="openTrackingLink()">
+                            https://track.loadshift.com.au
+                        </span>
+                    </div>
+                    <div class="text-xs opacity-80 mt-3">
+                        Questions? Contact: 0412 345 678
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Function to simulate opening tracking link
+        function openTrackingLink() {
+            // In a real application, this would navigate to the tracking page
+            // For demo purposes, we'll show an alert or send message to parent
+            if (window.parent && window.parent !== window) {
+                // Send message to parent frame to navigate to tracking page
+                window.parent.postMessage({
+                    action: 'navigateToTracking',
+                    url: 'track_on_the_way.html'
+                }, '*');
+            } else {
+                // Fallback for direct access
+                alert('Demo Feature: This would open the real-time tracking interface');
+            }
+        }
+        
+        // Initialize after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('SMS page loaded');
+        });
+    </script>
+</body>
+</html>

@@ -862,7 +862,7 @@
         class ZT2DemoController {
             constructor() {
                 this.currentStep = 0;
-                this.totalSteps = 8;
+                this.totalSteps = 9;
                 this.demoPages = [
                     {
                         url: 'pickles-zt2-demo/pages/bid_page.html',
@@ -957,6 +957,25 @@
                             name: 'Carrier Driver',
                             description: 'Professional driver responsible for pickup',
                             iconColor: 'text-orange-400'
+                        }
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/sms.html',
+                        type: 'mobile',
+                        title: 'SMS Transport Notification',
+                        description: 'Automated SMS notification system that instantly alerts customers when transport begins, providing tracking links and driver contact information.',
+                        features: [
+                            'Real-time SMS delivery notifications',
+                            'Direct tracking link integration',
+                            'Driver contact information',
+                            'iPhone-style message interface simulation'
+                        ],
+                        businessImpact: 'Improves customer communication transparency by 90%, reduces customer inquiries by 70%, ensures instant transport status awareness.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Auction buyer receiving transport updates',
+                            iconColor: 'text-cyan-400'
                         }
                     },
                     {
