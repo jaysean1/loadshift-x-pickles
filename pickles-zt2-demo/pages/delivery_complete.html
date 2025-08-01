@@ -16,12 +16,12 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
+        
         .mobile-container {
             max-width: 430px;
             margin: 0 auto;
             overflow: hidden;
             background: white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
         
         .fade-in {
@@ -122,6 +122,20 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
         }
+        
+        /* 底部固定按钮样式 */
+        .fixed-bottom-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            z-index: 50;
+            max-width: 430px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -144,7 +158,7 @@
         </div>
 
         <!-- 页面内容 -->
-        <div class="p-6">
+        <div class="p-6 pb-24">
             <!-- 状态1: QR码扫描 -->
             <div id="state-1" class="page-state">
                 <!-- 司机信息卡片 -->
@@ -189,12 +203,6 @@
                         </div>
                     </div>
                     
-                    <button id="scan-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg btn-hover">
-                        <div class="flex items-center justify-center space-x-2">
-                            <i data-lucide="scan" class="w-5 h-5"></i>
-                            <span>Start Scanning</span>
-                        </div>
-                    </button>
                 </div>
             </div>
 
@@ -272,7 +280,7 @@
                     <button id="photos-confirm-btn" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-4 px-6 font-bold text-lg btn-hover">
                         <div class="flex items-center justify-center space-x-2">
                             <i data-lucide="check-circle" class="w-5 h-5"></i>
-                            <span>Photos Look Good - Continue</span>
+                            <span>Look Good - Continue</span>
                         </div>
                     </button>
                 </div>
@@ -362,7 +370,7 @@
                     <button id="payment-confirm-btn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 px-6 font-bold text-lg btn-hover">
                         <div class="flex items-center justify-center space-x-2">
                             <i data-lucide="unlock" class="w-5 h-5"></i>
-                            <span>Release Payment - $1,130.00</span>
+                            <span>Release Payment</span>
                         </div>
                     </button>
                 </div>
@@ -439,6 +447,16 @@
         </div>
     </div>
 
+    <!-- 底部固定扫描按钮 -->
+    <div id="fixed-scan-btn" class="fixed-bottom-btn">
+        <button id="scan-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg btn-hover rounded-lg">
+            <div class="flex items-center justify-center space-x-2">
+                <i data-lucide="scan" class="w-5 h-5"></i>
+                <span>Start Scanning</span>
+            </div>
+        </button>
+    </div>
+
     <script>
         // 初始化Lucide图标
         lucide.createIcons();
@@ -462,6 +480,14 @@
             if (targetState) {
                 targetState.classList.remove('hidden');
                 targetState.classList.add('fade-in');
+            }
+            
+            // 控制底部扫描按钮显示
+            const fixedScanBtn = document.getElementById('fixed-scan-btn');
+            if (state === 1) {
+                fixedScanBtn.style.display = 'block';
+            } else {
+                fixedScanBtn.style.display = 'none';
             }
             
             // 更新标题
@@ -498,8 +524,9 @@
         function simulateQRScan() {
             const scanBtn = document.getElementById('scan-btn');
             const scanner = document.getElementById('qr-scanner');
+            const fixedScanBtn = document.getElementById('fixed-scan-btn');
             
-            scanBtn.textContent = 'Scanning...';
+            scanBtn.innerHTML = '<div class="flex items-center justify-center space-x-2"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Scanning...</span></div>';
             scanBtn.disabled = true;
             
             // 模拟扫描过程
@@ -510,6 +537,9 @@
                     <p class="text-sm text-gray-600">Driver identity confirmed</p>
                 </div>`;
                 lucide.createIcons();
+                
+                // 隐藏底部扫描按钮
+                fixedScanBtn.style.display = 'none';
                 
                 setTimeout(() => {
                     switchToState(2);
