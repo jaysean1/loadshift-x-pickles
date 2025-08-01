@@ -866,7 +866,7 @@
                 this.demoPages = [
                     {
                         url: 'pickles-zt2-demo/pages/bid_page.html',
-                        type: 'desktop',
+                        type: 'mobile',
                         title: 'Pickles Auction Platform Integration',
                         description: 'Seamless integration with Pickles auction platform featuring automatic context parameter passing, intelligent item specification parsing, and direct transport quote initiation.',
                         features: [
@@ -1037,6 +1037,9 @@
                 // Handle iframe load events
                 this.demoIframe.addEventListener('load', () => this.handleIframeLoad());
                 this.desktopIframe.addEventListener('load', () => this.handleIframeLoad());
+                
+                // Handle messages from iframe pages
+                window.addEventListener('message', (event) => this.handleIframeMessage(event));
             }
             
             startDemo() {
@@ -1156,6 +1159,14 @@
             handleIframeLoad() {
                 // Add any iframe-specific handling here
                 console.log(`Loaded demo page: ${this.demoPages[this.currentStep].title}`);
+            }
+            
+            handleIframeMessage(event) {
+                // Handle messages from iframe pages
+                if (event.data && event.data.action === 'nextStep') {
+                    console.log('Received nextStep message from iframe');
+                    this.nextStep();
+                }
             }
             
             // 回到首页方法 - Return to home page method

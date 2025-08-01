@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2003 Kenworth C500T - Pickles Auctions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         body {
             margin: 0;
@@ -19,11 +21,49 @@
             height: auto;
             display: block;
         }
+        
+        .floating-cta {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            z-index: 50;
+        }
+        
+        .content-padding-bottom {
+            padding-bottom: 120px;
+        }
     </style>
 </head>
-<body>
-    <img src="../assets/images/bid_page.png" 
+<body class="content-padding-bottom">
+    <img src="../assets/images/IMG_9E8C3A77AE89-1.jpeg" 
          alt="2003 Kenworth C500T - Pickles Auction" 
          class="auction-image">
+    
+    <!-- Floating Action Button -->
+    <div class="floating-cta">
+        <button id="loadshift-quote-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+            <div class="flex items-center justify-center space-x-2">
+                <i data-lucide="truck" class="w-5 h-5"></i>
+                <span>Loadshift Delivery Quote</span>
+            </div>
+        </button>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Handle button click
+        document.getElementById('loadshift-quote-btn').addEventListener('click', function() {
+            // Send message to parent window to navigate to next step
+            window.parent.postMessage({ action: 'nextStep' }, '*');
+        });
+    </script>
 </body>
 </html>
