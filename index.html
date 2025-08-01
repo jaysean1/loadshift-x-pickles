@@ -457,6 +457,46 @@
             background: var(--gradient-primary);
         }
         
+        /* User Identity Section Styles */
+        .user-identity-section {
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .user-avatar-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+        
+        /* Different user type avatar styles */
+        .user-avatar-container.customer {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+        
+        .user-avatar-container.driver {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+        }
+        
+        .user-avatar-container.admin {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+        
         @media (max-width: 768px) {
             .feature-card {
                 margin-bottom: 1rem;
@@ -709,6 +749,19 @@
                 <!-- Contextual Information Panel -->
                 <div id="info-panel" class="flex-1 min-w-0">
                     <div class="info-panel p-6 rounded-lg card-shadow">
+                        <!-- User Identity Section -->
+                        <div class="user-identity-section mb-4 p-3 rounded-lg" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1)); border: 1px solid rgba(99, 102, 241, 0.2);">
+                            <div class="flex items-center space-x-3">
+                                <div class="user-avatar-container">
+                                    <i id="user-icon" data-lucide="user" class="w-8 h-8 text-cyan-400"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium" style="color: var(--text-accent);">Current User Perspective</p>
+                                    <p id="user-name" class="text-lg font-semibold" style="color: var(--text-primary);">Customer</p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <h3 id="info-title" class="text-2xl font-bold mb-4" style="color: var(--text-primary);">AI-Powered Quote Generation</h3>
                         <p id="info-description" class="mb-6" style="color: var(--text-secondary);">
                             Experience instant transport cost estimation with machine learning-driven analysis, computer vision item recognition, and access to our network of 12+ certified carriers.
@@ -822,7 +875,13 @@
                             'Intelligent item specification parsing',
                             'One-click transport quote activation'
                         ],
-                        businessImpact: 'Eliminates manual data entry between auction browsing and transport booking, improving conversion rates by 60% through seamless user experience.'
+                        businessImpact: 'Eliminates manual data entry between auction browsing and transport booking, improving conversion rates by 60% through seamless user experience.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Auction buyer seeking transport services',
+                            iconColor: 'text-cyan-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/client_quote.html',
@@ -835,7 +894,13 @@
                             '60-minute SLA guarantee',
                             'Three pricing options: cheapest, fastest, highest-rated'
                         ],
-                        businessImpact: 'Reduces quote turnaround from days to minutes, improving customer satisfaction and conversion rates by 40%.'
+                        businessImpact: 'Reduces quote turnaround from days to minutes, improving customer satisfaction and conversion rates by 40%.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Auction buyer seeking transport services',
+                            iconColor: 'text-cyan-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/phonecall_confirm.html',
@@ -848,7 +913,13 @@
                             'Intelligent conversation flow',
                             'Automatic detail verification'
                         ],
-                        businessImpact: 'Eliminates 80% of manual confirmation calls, reducing operational costs while improving customer experience.'
+                        businessImpact: 'Eliminates 80% of manual confirmation calls, reducing operational costs while improving customer experience.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Customer confirming transport details via AI',
+                            iconColor: 'text-cyan-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/order_confirmation.html',
@@ -861,7 +932,13 @@
                             'Real-time notification system',
                             'Digital documentation'
                         ],
-                        businessImpact: 'Streamlines order processing by 90%, from 2 hours to 12 minutes, with 99.5% accuracy rate.'
+                        businessImpact: 'Streamlines order processing by 90%, from 2 hours to 12 minutes, with 99.5% accuracy rate.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Customer awaiting order confirmation',
+                            iconColor: 'text-cyan-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/pickup_auth.html',
@@ -874,7 +951,13 @@
                             'Digital signatures',
                             'Identity verification'
                         ],
-                        businessImpact: 'Ensures 100% secure pickups while reducing verification time from 15 minutes to 2 minutes.'
+                        businessImpact: 'Ensures 100% secure pickups while reducing verification time from 15 minutes to 2 minutes.',
+                        userType: {
+                            icon: 'truck',
+                            name: 'Carrier Driver',
+                            description: 'Professional driver responsible for pickup',
+                            iconColor: 'text-orange-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/god_mode.html',
@@ -887,7 +970,13 @@
                             'Automated exception handling',
                             'Performance metrics and KPIs'
                         ],
-                        businessImpact: 'Provides 360° operational visibility, reducing manual oversight by 95% and improving delivery performance by 30%.'
+                        businessImpact: 'Provides 360° operational visibility, reducing manual oversight by 95% and improving delivery performance by 30%.',
+                        userType: {
+                            icon: 'shield-check',
+                            name: 'Platform Admin',
+                            description: 'Admin monitoring platform operations',
+                            iconColor: 'text-purple-400'
+                        }
                     },
                     {
                         url: 'pickles-zt2-demo/pages/delivery_complete.html',
@@ -900,7 +989,13 @@
                             'Automatic payment processing',
                             'Performance analytics'
                         ],
-                        businessImpact: 'Achieves 98% customer satisfaction rate with automated completion processing, reducing administrative overhead by 85%.'
+                        businessImpact: 'Achieves 98% customer satisfaction rate with automated completion processing, reducing administrative overhead by 85%.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Customer receiving goods and confirming delivery',
+                            iconColor: 'text-cyan-400'
+                        }
                     }
                 ];
                 
@@ -924,6 +1019,11 @@
                 this.infoDescription = document.getElementById('info-description');
                 this.infoFeatures = document.getElementById('info-features');
                 this.infoBusinessImpact = document.getElementById('info-business-impact');
+                
+                // User identity elements
+                this.userIcon = document.getElementById('user-icon');
+                this.userName = document.getElementById('user-name');
+                this.userAvatarContainer = document.querySelector('.user-avatar-container');
                 
             }
             
@@ -980,6 +1080,21 @@
                 this.infoTitle.textContent = currentPage.title;
                 this.infoDescription.textContent = currentPage.description;
                 this.infoBusinessImpact.textContent = currentPage.businessImpact;
+                
+                // Update user identity information
+                this.userIcon.setAttribute('data-lucide', currentPage.userType.icon);
+                this.userIcon.className = `w-8 h-8 ${currentPage.userType.iconColor}`;
+                this.userName.textContent = currentPage.userType.name;
+                
+                // Update avatar container styling based on user type
+                this.userAvatarContainer.className = 'user-avatar-container';
+                if (currentPage.userType.icon === 'user') {
+                    this.userAvatarContainer.classList.add('customer');
+                } else if (currentPage.userType.icon === 'truck') {
+                    this.userAvatarContainer.classList.add('driver');
+                } else if (currentPage.userType.icon === 'shield-check') {
+                    this.userAvatarContainer.classList.add('admin');
+                }
                 
                 // Update features list
                 this.infoFeatures.innerHTML = currentPage.features.map(feature => `
