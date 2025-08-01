@@ -862,7 +862,7 @@
         class ZT2DemoController {
             constructor() {
                 this.currentStep = 0;
-                this.totalSteps = 7;
+                this.totalSteps = 8;
                 this.demoPages = [
                     {
                         url: 'pickles-zt2-demo/pages/bid_page.html',
@@ -957,6 +957,25 @@
                             name: 'Carrier Driver',
                             description: 'Professional driver responsible for pickup',
                             iconColor: 'text-orange-400'
+                        }
+                    },
+                    {
+                        url: 'pickles-zt2-demo/pages/track_on_the_way.html',
+                        type: 'mobile',
+                        title: 'Real-time Transport Tracking',
+                        description: 'Complete transport visibility for buyers with real-time GPS tracking, driver communication, transport timeline, and intelligent arrival notifications.',
+                        features: [
+                            'SMS notification system with direct links',
+                            'Real-time GPS location tracking map',
+                            'Detailed transport status timeline',
+                            'Driver information and direct communication'
+                        ],
+                        businessImpact: 'Improves customer experience transparency by 95%, reduces inquiry calls by 80%, achieves 98% transport satisfaction rate.',
+                        userType: {
+                            icon: 'user',
+                            name: 'Customer',
+                            description: 'Buyer tracking transport progress',
+                            iconColor: 'text-cyan-400'
                         }
                     },
                     {
