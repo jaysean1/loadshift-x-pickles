@@ -654,36 +654,38 @@
                             <!-- Feature 4: Keep your loved ones safe (full width) -->
                             <div class="feature-card relative col-span-full overflow-hidden lg:col-span-6 bg-white rounded-lg shadow-sm">
                                 <div class="grid h-full pt-6 sm:grid-cols-2">
-                                    <div class="relative z-10 flex flex-col justify-between space-y-12 lg:space-y-6 p-6">
-                                        <div class="relative flex aspect-square size-12 rounded-full border border-gray-200 before:absolute before:-inset-2 before:rounded-full before:border before:border-gray-100">
-                                            <i data-lucide="users" class="feature-icon m-auto size-6 text-indigo-600"></i>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <h2 class="text-lg font-medium" style="color: var(--text-primary);">Keep your Loads Ones Safe</h2>
-                                            <p style="color: var(--text-secondary);">Comprehensive protection for your items and transport security, making every delivery trustworthy</p>
+                                    <div class="relative z-10 flex flex-col justify-center space-y-6 p-6">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="relative flex aspect-square size-16 rounded-full border border-gray-200 before:absolute before:-inset-2 before:rounded-full before:border before:border-gray-100">
+                                                <i data-lucide="users" class="feature-icon m-auto size-8 text-indigo-600"></i>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <h2 class="text-lg font-medium" style="color: var(--text-primary);">Keep your Loads Ones Safe</h2>
+                                                <p style="color: var(--text-secondary);">Comprehensive protection for your items and transport security, making every delivery trustworthy</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="relative mt-6 before:bg-gray-200 before:absolute before:inset-0 before:mx-auto before:w-px sm:-my-6 sm:-mr-6">
                                         <div class="relative flex h-full flex-col justify-center space-y-6 py-6">
-                                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">AI Agent</span>
-                    <div class="ring-background size-7 ring-4">
+                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
+                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">AI Agent</span>
+                                                <div class="ring-background size-7 ring-4">
                                                     <div class="size-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
                                                         <i data-lucide="bot" class="w-4 h-4 text-white"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                                            <div class="relative ml-[calc(50%-1rem)] flex items-center gap-2">
-                    <div class="ring-background size-8 ring-4">
-                        <div class="size-full rounded-full bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
-                        </div>
-                    </div>
-                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Security Auth</span>
-                </div>
-                                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                    <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Real-time Tracking</span>
-                    <div class="ring-background size-7 ring-4">
+                                            <div class="relative ml-[calc(50%-1rem)] flex items-center gap-2">
+                                                <div class="ring-background size-8 ring-4">
+                                                    <div class="size-full rounded-full bg-gradient-to-r from-green-500 to-teal-600 flex items-center justify-center">
+                                                        <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Security Auth</span>
+                                            </div>
+                                            <div class="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
+                                                <span class="block h-fit rounded border border-gray-200 px-2 py-1 text-xs shadow-sm text-white">Real-time Tracking</span>
+                                                <div class="ring-background size-7 ring-4">
                                                     <div class="size-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center">
                                                         <i data-lucide="map-pin" class="w-4 h-4 text-white"></i>
                                                     </div>
@@ -1096,6 +1098,9 @@
             nextStep() {
                 if (this.currentStep < this.totalSteps - 1) {
                     this.navigateToStep(this.currentStep + 1);
+                } else {
+                    // 当到达最后一步时，点击"Complete Demo"回到首页
+                    this.returnToHome();
                 }
             }
             
